@@ -225,20 +225,6 @@
             background-color: #f1f5f9;
         }
 
-        .history-card {
-            background-color: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-
-        .history-card h4 {
-            color: var(--primary);
-            margin-bottom: 4px;
-        }
-
         .disclaimer {
             font-size: 0.78rem;
             color: var(--text-muted);
@@ -268,7 +254,6 @@
     </div>
 
     <script>
-        // Guarda as recomendações acumuladas da utente
         let sessionEvaluations = [];
         let initialAssessmentDone = false;
 
@@ -313,9 +298,9 @@
             /* 1. VASOMOTORES */
             vasomotores_1: {
                 tag: "Vasomotores",
-                title: "Histórico de cancro forte estrogénio-dependente?",
+                title: "Histórico de cancro hormonodependente?",
                 binary: true,
-                yes: { result: "Sintomas Vasomotores: Não aconselhar fitoestrogénios sem avaliação médica.", urgent: true },
+                yes: { result: "Sintomas Vasomotores: Não recomendar fitoestrogénios sem avaliação médica.", urgent: true },
                 no: { next: "vasomotores_2" }
             },
             vasomotores_2: {
@@ -327,24 +312,24 @@
             },
             vasomotores_3: {
                 tag: "Vasomotores",
-                title: "Informar sobre o possível agravamento dos sintomas vasomotores e promover a cessação tabágica.<br><br>Pretende limitação a alterações do estilo de vida / não farmacológica?",
+                title: "Informar sobre o possível agravamento dos sintomas vasomotores e promover a cessação tabágica.<br><br>Existe limitação à utilização de fitoestrogénios?",
                 binary: true,
-                yes: { next: "vasomotores_4" },
-                no: { result: "Sintomas Vasomotores: Considerar extrato de pólen purificado (ou 40 mg extrato cimicifuga/dia + 120 mg extrato de pimenteiro)." }
+                yes: { next: "vasomotores_5" },
+                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40–72 mg/dia." }
             },
             vasomotores_4: {
                 tag: "Vasomotores",
-                title: "Pretende limitação a alterações da estilo de vida / não farmacológica?",
+                title: "Existe limitação à utilização de fitoestrogénios?",
                 binary: true,
-                yes: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40-80 mg/dia." },
-                no: { next: "vasomotores_5" }
+                yes: { next: "vasomotores_5" },
+                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40–72 mg/dia." }
             },
             vasomotores_5: {
                 tag: "Vasomotores",
-                title: "Tem patologia hepática?",
+                title: "Patologia hepática?",
                 binary: true,
-                yes: { result: "Sintomas Vasomotores: Evitar área de cimicifuga (Cimicifuga racemosa). Considerar Extrato de Pólen purificado.", urgent: true },
-                no: { result: "Sintomas Vasomotores: Considerar Extrato de Pólen purificado ou (ou 40 mg extrato cimicifuga/dia + 120 mg extrato de pimenteiro)." }
+                yes: { result: "Sintomas Vasomotores: Evitar erva-de-são-cristóvão (Cimicifuga racemosa). Considerar Extrato de Pólen purificado (ex: 40 mg extrato citoplasmático + 120 mg extrato de pistilo/dia).", urgent: true },
+                no: { result: "Sintomas Vasomotores: Considerar Extrato de Pólen purificado ou erva-de-são-cristóvão (Cimicifuga racemosa)." }
             },
 
             /* 2. GENITURINÁRIOS */
@@ -550,7 +535,6 @@
 
             if (!node) return;
 
-            // Se for o nó de selecionar o sintoma e a triagem inicial já tiver sido feita, avança direto
             if (nodeKey === 'start' && initialAssessmentDone) {
                 renderNode('q_predominante');
                 return;
@@ -601,12 +585,10 @@
         function showResult(text, isUrgent = false) {
             const app = document.getElementById('appContent');
             
-            // Adicionar a esta avaliação ao histórico da utente
             sessionEvaluations.push({ text, isUrgent });
 
             let html = `<h2 class="question-title" style="text-align: center; margin-bottom: 16px;">Recomendações Clínicas da Utente</h2>`;
             
-            // Mostrar todas as recomendações já acumuladas nesta consulta
             sessionEvaluations.forEach((item, index) => {
                 const cardClass = item.isUrgent ? 'urgent' : 'success';
                 const cardTitle = item.isUrgent ? '🔴 Encaminhamento / Recomendação Clínica' : '💊 Orientação / Aconselhamento Farmacêutico';
@@ -621,7 +603,6 @@
                 `;
             });
 
-            // Botão para CONTINUAR a avaliar outros sintomas em vez de reiniciar
             html += `
                 <button class="btn-action" onclick="renderNode('q_predominante')">➕ Avaliar Outro Sintoma da Utente</button>
                 <button class="btn-secondary-action" onclick="resetFullSession()">🔄 Iniciar Nova Utente (Limpar Tudo)</button>
@@ -636,7 +617,6 @@
             renderNode('start');
         }
 
-        // Iniciar aplicação
         renderNode('start');
     </script>
 
