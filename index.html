@@ -3,85 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triagem e Aconselhamento Farmacêutico Online</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Avaliação de Sintomas Abdominais | Portal de Saúde</title>
+    <!-- Fonte Oficial e Limpa -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #006699;       /* Azul Clínico/SNS */
+            --primary-dark: #004d73;
+            --secondary: #00a88f;     /* Verde Saúde */
+            --bg-body: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #d9534f;
+            --warning: #f0ad4e;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         body {
-            background-color: #f0f4f8;
-            color: #1e293b;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 15px;
         }
 
-        .container {
-            background: #ffffff;
+        /* Topo Institucional (Estilo SNS 24) */
+        .top-bar {
             width: 100%;
-            max-width: 650px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .banner-container {
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            background-color: #e0f2fe;
-        }
-
-        .banner-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .header {
-            background: #0284c7;
+            max-width: 680px;
+            background-color: var(--primary);
             color: #ffffff;
-            padding: 20px 24px;
+            padding: 12px 20px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .top-bar .emergency-notice {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Contentor Principal */
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 680px;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            border-top: none;
+            overflow: hidden;
+        }
+
+        /* Banner de Serviço */
+        .header-hero {
+            background: linear-gradient(135deg, #006699 0%, #00a88f 100%);
+            color: white;
+            padding: 28px 24px;
             text-align: center;
         }
 
-        .header h1 {
-            font-size: 1.4rem;
+        .header-hero h1 {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.95;
+        .header-hero p {
+            font-size: 0.95rem;
+            opacity: 0.92;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        .progress-bar-container {
+        /* Barra de Progresso Passos */
+        .progress-container {
             width: 100%;
-            background-color: #e2e8f0;
+            background-color: #e9ecef;
             height: 6px;
         }
 
         .progress-bar {
             height: 100%;
-            background-color: #0ea5e9;
-            width: 0%;
+            background-color: var(--secondary);
+            width: 25%;
             transition: width 0.3s ease;
         }
 
+        /* Área do Formulario */
         .content {
             padding: 32px 24px;
         }
@@ -92,35 +120,47 @@
 
         .step.active {
             display: block;
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .question-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 20px;
+        .step-tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
         }
 
-        .options-grid {
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        /* Opções de Seleção */
+        .options-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
         .btn-option {
-            background: #f8fafc;
-            border: 2px solid #cbd5e1;
-            padding: 14px 20px;
-            border-radius: 10px;
+            background: #ffffff;
+            border: 2px solid var(--border);
+            padding: 16px 20px;
+            border-radius: 8px;
             font-size: 1rem;
-            font-weight: 500;
-            color: #334155;
+            font-weight: 600;
+            color: var(--text-main);
             cursor: pointer;
             text-align: left;
             transition: all 0.2s ease;
@@ -131,12 +171,13 @@
         }
 
         .btn-option:hover {
-            border-color: #0284c7;
-            background-color: #f0f9ff;
-            color: #0369a1;
+            border-color: var(--primary);
+            background-color: #f0f7fa;
+            color: var(--primary);
         }
 
-        .btn-grid-binary {
+        /* Pergunta Sim/Não */
+        .binary-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
@@ -145,9 +186,8 @@
         .btn-binary {
             text-align: center;
             justify-content: center;
-            font-weight: 600;
             font-size: 1.1rem;
-            padding: 16px;
+            padding: 18px;
         }
 
         .btn-binary.yes:hover {
@@ -162,229 +202,257 @@
             color: #b91c1c;
         }
 
-        .result-card {
+        /* Card de Resultado Final */
+        .result-box {
             background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
             margin-bottom: 20px;
         }
 
-        .result-card h3 {
-            font-size: 1.1rem;
-            color: #0369a1;
-            margin-bottom: 10px;
+        .result-box h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .result-card p {
+        .result-box p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 12px;
+        }
+
+        .notice-card {
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
             font-size: 0.95rem;
             line-height: 1.5;
-            color: #334155;
-            margin-bottom: 10px;
         }
 
-        .alert-box {
+        .notice-card.urgent {
             background-color: #fef2f2;
-            border-left: 4px solid #ef4444;
-            padding: 16px;
-            border-radius: 6px;
-            margin-top: 15px;
-        }
-
-        .alert-box p {
+            border-left: 5px solid var(--danger);
             color: #991b1b;
-            font-size: 0.9rem;
-            margin: 0;
-            font-weight: 500;
         }
 
-        .btn-reset {
-            background-color: #0284c7;
+        .notice-card.pharmacy {
+            background-color: #f0fdf4;
+            border-left: 5px solid var(--secondary);
+            color: #166534;
+        }
+
+        .btn-restart {
+            background-color: var(--primary);
             color: white;
             border: none;
             padding: 14px 20px;
-            border-radius: 10px;
+            border-radius: 8px;
             width: 100%;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: background 0.2s;
+            margin-top: 10px;
         }
 
-        .btn-reset:hover {
-            background-color: #0369a1;
+        .btn-restart:hover {
+            background-color: var(--primary-dark);
         }
 
+        /* Rodapé de Isenção */
         .disclaimer {
-            font-size: 0.75rem;
-            color: #64748b;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             text-align: center;
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 1px solid #e2e8f0;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 480px) {
+            .binary-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Imagem Banner Médica -->
-    <div class="banner-container">
-        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" alt="Consulta Médica Online" class="banner-img">
+    <!-- Barra de Cabeçalho Institucional -->
+    <div class="top-bar">
+        <span>SERVIÇO DE TRIAGEM ONLINE</span>
+        <span class="emergency-notice">Em emergência ligue 112</span>
     </div>
 
-    <!-- Cabeçalho -->
-    <div class="header">
-        <h1>🩺 Triagem Médica & Farmacêutica</h1>
-        <p>Avaliação preliminar de sintomas abdominais</p>
+    <div class="container">
+        <!-- Hero Banner -->
+        <div class="header-hero">
+            <h1>Avaliação e Orientação de Sintomas</h1>
+            <p>Aconselhamento clínico preliminar e encaminhamento farmacêutico</p>
+        </div>
+
+        <!-- Progresso -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Conteúdo do Formuário -->
+        <div class="content">
+
+            <!-- PASSO 1: Intensidade -->
+            <div class="step active" id="step1">
+                <span class="step-tag">Passo 1 de 4</span>
+                <h2 class="question-title">Qual é o nível de intensidade da sua dor de barriga?</h2>
+                <div class="options-list">
+                    <button class="btn-option" onclick="nextStep(1, 'pouca')">Pouca dor (Ligeira / Desconforto abdominal) <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(1, 'moderada')">Dor moderada (Dificulta as atividades diárias) <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(1, 'muita')">Muitas dores (Dor intensa / Forte / Incapacitante) <span>→</span></button>
+                </div>
+            </div>
+
+            <!-- PASSO 2: Início -->
+            <div class="step" id="step2">
+                <span class="step-tag">Passo 2 de 4</span>
+                <h2 class="question-title">Há quanto tempo começaram os sintomas?</h2>
+                <div class="options-list">
+                    <button class="btn-option" onclick="nextStep(2, 'hoje')">Começou hoje (Há poucas horas) <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(2, 'dias')">Há 2 a 3 dias <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(2, 'semana')">Há mais de uma semana <span>→</span></button>
+                </div>
+            </div>
+
+            <!-- PASSO 3: Sintomas Acompanhantes -->
+            <div class="step" id="step3">
+                <span class="step-tag">Passo 3 de 4</span>
+                <h2 class="question-title">Apresenta algum destes sintomas acompanhantes?</h2>
+                <div class="options-list">
+                    <button class="btn-option" onclick="nextStep(3, 'azia')">Azia, sensação de enfartamento ou enjoos <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(3, 'diarreia')">Diarreia ou cólicas intestinais <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(3, 'alerta')">Febre alta, vómitos persistentes ou sangue nas fezes <span>→</span></button>
+                    <button class="btn-option" onclick="nextStep(3, 'nenhum')">Nenhum destes sintomas <span>→</span></button>
+                </div>
+            </div>
+
+            <!-- PASSO 4: Medicação Atual (SIM / NÃO) -->
+            <div class="step" id="step4">
+                <span class="step-tag">Passo 4 de 4</span>
+                <h2 class="question-title">Está a tomar atualmente algum medicamento?</h2>
+                <div class="binary-grid">
+                    <button class="btn-option btn-binary yes" onclick="nextStep(4, 'sim')">Sim</button>
+                    <button class="btn-option btn-binary no" onclick="nextStep(4, 'nao')">Não</button>
+                </div>
+            </div>
+
+            <!-- PASSO FINAL: Resultado -->
+            <div class="step" id="stepResult">
+                <h2 class="question-title" style="text-align: center; margin-bottom: 16px;">Recomendações e Encaminhamento</h2>
+                
+                <div class="result-box">
+                    <h3>🩺 Orientação Clínica:</h3>
+                    <p id="resultText">A processar os dados da triagem...</p>
+                    
+                    <div id="noticeContainer" class="notice-card"></div>
+                </div>
+
+                <button class="btn-restart" onclick="restartTriagem()">Fazer Nova Avaliação</button>
+            </div>
+
+            <div class="disclaimer">
+                <strong>Aviso de Saúde Pública:</strong> Esta ferramenta disponibiliza apenas uma orientação preliminar e não substitui um diagnóstico clínico prestado por um médico ou farmacêutico.
+            </div>
+        </div>
     </div>
 
-    <!-- Barra de Progresso -->
-    <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+    <script>
+        // Objeto para registar as respostas
+        const answers = {
+            intensidade: '',
+            inicio: '',
+            sintomas: '',
+            medicamento: ''
+        };
 
-    <!-- Conteúdo / Questionário -->
-    <div class="content">
+        const totalSteps = 4;
 
-        <!-- Passo 1: Intensidade da Dor -->
-        <div class="step active" id="step1">
-            <h2 class="question-title">Qual é o nível de intensidade da sua dor de barriga?</h2>
-            <div class="options-grid">
-                <button class="btn-option" onclick="nextStep(1, 'leve')">Pouca dor (Ligeira / Desconforto) <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(1, 'moderada')">Dor moderada (Atrapalha o dia a dia) <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(1, 'intensa')">Muitas dores (Dor forte / Incapacitante) <span>→</span></button>
-            </div>
-        </div>
+        function updateProgress(step) {
+            const percentage = (step / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
 
-        <!-- Passo 2: Quando começou -->
-        <div class="step" id="step2">
-            <h2 class="question-title">Quando é que a dor começou?</h2>
-            <div class="options-grid">
-                <button class="btn-option" onclick="nextStep(2, 'hoje')">Hoje (Há poucas horas) <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(2, 'dias')">Há 2 ou 3 dias <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(2, 'semana')">Há mais de uma semana <span>→</span></button>
-            </div>
-        </div>
+        function nextStep(currentStep, value) {
+            // Guardar a resposta do passo atual
+            if (currentStep === 1) answers.intensidade = value;
+            if (currentStep === 2) answers.inicio = value;
+            if (currentStep === 3) answers.sintomas = value;
+            if (currentStep === 4) answers.medicamento = value;
 
-        <!-- Passo 3: Sintomas Acompanhantes -->
-        <div class="step" id="step3">
-            <h2 class="question-title">Apresenta algum destes sintomas adicionais?</h2>
-            <div class="options-grid">
-                <button class="btn-option" onclick="nextStep(3, 'enjoo')">Enjoos, náuseas ou azia <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(3, 'diarreia')">Diarreia ou cólicas líquidas <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(3, 'febre')">Febre, vómitos persistentes ou sangue <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(3, 'nenhum')">Nenhum destes <span>→</span></button>
-            </div>
-        </div>
+            // Esconder o passo atual
+            document.getElementById(`step${currentStep}`).classList.remove('active');
 
-        <!-- Passo 4: Pergunta de Medicamentos (SIM / NÃO) -->
-        <div class="step" id="step4">
-            <h2 class="question-title">Está a tomar atualmente algum medicamento?</h2>
-            <div class="btn-grid-binary">
-                <button class="btn-option btn-binary yes" onclick="nextStep(4, 'sim')">Sim</button>
-                <button class="btn-option btn-binary no" onclick="nextStep(4, 'nao')">Não</button>
-            </div>
-        </div>
+            if (currentStep < totalSteps) {
+                const next = currentStep + 1;
+                document.getElementById(`step${next}`).classList.add('active');
+                updateProgress(next);
+            } else {
+                updateProgress(4);
+                processResult();
+            }
+        }
 
-        <!-- Passo Final: Resultado -->
-        <div class="step" id="stepResult">
-            <h2 class="question-title" style="text-align: center; margin-bottom: 15px;">Avaliação Farmacêutica</h2>
+        function processResult() {
+            document.getElementById('stepResult').classList.add('active');
             
-            <div class="result-card">
-                <h3>Recomendação e Cuidados:</h3>
-                <p id="recommendationText">A analisar as suas respostas...</p>
-            </div>
+            const resultText = document.getElementById('resultText');
+            const noticeContainer = document.getElementById('noticeContainer');
 
-            <div class="alert-box" id="alertBox">
-                <p id="alertText">⚠️ Se os sintomas persistirem ou piorarem, consulte um profissional de saúde.</p>
-            </div>
-
-            <br>
-            <button class="btn-reset" onclick="resetForm()">Fazer Nova Avaliação</button>
-        </div>
-
-        <div class="disclaimer">
-            Nota: Esta ferramenta é apenas informativa e simulada para apoio. Não substitui um diagnóstico médico oficial.
-        </div>
-    </div>
-</div>
-
-<script>
-    let userAnswers = {
-        intensidade: '',
-        inicio: '',
-        sintomas: '',
-        tomaMedicamento: ''
-    };
-
-    const totalSteps = 4;
-
-    function updateProgress(currentStep) {
-        const percentage = ((currentStep - 1) / totalSteps) * 100;
-        document.getElementById('progressBar').style.width = percentage + '%';
-    }
-
-    function nextStep(currentStep, answer) {
-        if (currentStep === 1) userAnswers.intensidade = answer;
-        if (currentStep === 2) userAnswers.inicio = answer;
-        if (currentStep === 3) userAnswers.sintomas = answer;
-        if (currentStep === 4) userAnswers.tomaMedicamento = answer;
-
-        document.getElementById(`step${currentStep}`).classList.remove('active');
-
-        if (currentStep < totalSteps) {
-            const next = currentStep + 1;
-            document.getElementById(`step${next}`).classList.add('active');
-            updateProgress(next);
-        } else {
-            document.getElementById('progressBar').style.width = '100%';
-            showResults();
+            // Lógica de Triagem e Encaminhamento
+            if (answers.intensidade === 'muita' || answers.sintomas === 'alerta') {
+                resultText.innerHTML = "Identificámos sinais de dor intensa ou sintomas de alerta (como febre ou vómitos persistentes). <strong>Não deve recorrer à automedicação neste quadro clínico.</strong>";
+                
+                noticeContainer.className = "notice-card urgent";
+                noticeContainer.innerHTML = "⚠️ <strong>CONSULTE UM MÉDICO / LIGUE SNS 24 (808 24 24 24):</strong><br>Medicamentos como <strong>antibióticos</strong>, anti-inflamatórios fortes ou analgesia específica necessitam obrigatoriamente de consulta clínica e receita médica. Dirija-se a um centro de saúde ou urgência médica.";
+            } 
+            else if (answers.sintomas === 'azia') {
+                resultText.innerHTML = "Os sintomas indicam um desconforto gástrico ligeiro. É recomendado fazer refeições leves, evitar gorduras e manter boa hidratação.";
+                
+                noticeContainer.className = "notice-card pharmacy";
+                noticeContainer.innerHTML = "💊 <strong>Aconselhamento na Farmácia:</strong> Pode consultar o seu farmacêutico para a indicação de um antiácido ou protetor gástrico de venda livre. " + 
+                (answers.medicamento === 'sim' ? "<br><br><em>Atenção: Informe o farmacêutico sobre a medicação habitual que já está a tomar para evitar interações.</em>" : "");
+            } 
+            else if (answers.sintomas === 'diarreia') {
+                resultText.innerHTML = "Recomenda-se o reforço imediato da ingestão de líquidos (água ou soluções de reidratação oral) para evitar a desidratação.";
+                
+                noticeContainer.className = "notice-card pharmacy";
+                noticeContainer.innerHTML = "💊 <strong>Aconselhamento na Farmácia:</strong> Pode recorrer a probióticos de venda livre para repor a flora intestinal. Se a diarreia persistir por mais de 48 horas ou surgir febre, <strong>consulte um médico</strong>.";
+            } 
+            else {
+                resultText.innerHTML = "Para dores abdominais ligeiras e pontuais, recomenda-se repouso, aplicação de calor suave na zona abdominal e ingestão de chás/infusões mornas.";
+                
+                noticeContainer.className = "notice-card pharmacy";
+                noticeContainer.innerHTML = "ℹ️ <strong>Acompanhamento:</strong> Caso a dor não melhore no prazo de 24h a 48h ou se intensificar, consulte um farmacêutico ou o seu médico assistente.";
+            }
         }
-    }
 
-    function showResults() {
-        document.getElementById('stepResult').classList.add('active');
-        
-        const recText = document.getElementById('recommendationText');
-        const alertBox = document.getElementById('alertBox');
-        const alertText = document.getElementById('alertText');
+        function restartTriagem() {
+            answers.intensidade = '';
+            answers.inicio = '';
+            answers.sintomas = '';
+            answers.medicamento = '';
 
-        if (userAnswers.intensidade === 'intensa' || userAnswers.sintomas === 'febre') {
-            recText.innerHTML = "<strong>Atenção:</strong> Devido à intensidade da dor ou à presença de sintomas de alerta (como febre ou vómitos), <strong>não deve tomar medicação por iniciativa própria</strong> sem avaliação clínica.";
-            alertText.innerHTML = "🔴 <strong>CONSULTE UM MÉDICO:</strong> Medicamentos como antibióticos ou analgésicos fortes necessitam obrigatoriamente de receita e diagnóstico médico. Dirija-se a um centro de saúde ou urgência.";
-            alertBox.style.backgroundColor = "#fef2f2";
-            alertBox.style.borderColor = "#ef4444";
-        } 
-        else if (userAnswers.sintomas === 'enjoo') {
-            recText.innerHTML = "Para desconforto gástrico e azia ligeira, é recomendado repouso digestivo, hidratação e, se necessário, o uso de um antiácido ou protetor gástrico de venda livre recomendado na farmácia.";
-            alertText.innerHTML = "💡 Se estiver a tomar outros medicamentos, confirme com o farmacêutico para evitar interações.";
-            alertBox.style.backgroundColor = "#eff6ff";
-            alertBox.style.borderColor = "#3b82f6";
-        } 
-        else if (userAnswers.sintomas === 'diarreia') {
-            recText.innerHTML = "Recomenda-se reforçar a hidratação com água ou soluções de reidratação oral. Evite alimentos gordurosos ou com lactose nas próximas horas.";
-            alertText.innerHTML = "💡 Se a diarreia persistir por mais de 48h ou for acompanhada de febre, consulte um médico antes de tomar qualquer medicação.";
-            alertBox.style.backgroundColor = "#fffbe0";
-            alertBox.style.borderColor = "#f59e0b";
-        } 
-        else {
-            recText.innerHTML = "Para dores ligeiras e pontuais, repousar e beber chá de camomila ou infusões suaves pode ajudar a relaxar a musculatura abdominal.";
-            alertText.innerHTML = "ℹ️ Caso a dor não passe em 24h a 48h, consulte um farmacêutico ou médico.";
-            alertBox.style.backgroundColor = "#f0fdf4";
-            alertBox.style.borderColor = "#22c55e";
+            document.getElementById('stepResult').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            updateProgress(1);
         }
-    }
 
-    function resetForm() {
-        userAnswers = { intensidade: '', inicio: '', sintomas: '', tomaMedicamento: '' };
-        document.getElementById('stepResult').classList.remove('active');
-        document.getElementById('step1').classList.add('active');
+        // Inicializar barra
         updateProgress(1);
-    }
-
-    updateProgress(1);
-</script>
-
+    </script>
 </body>
 </html>
