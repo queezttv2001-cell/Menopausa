@@ -1,164 +1,387 @@
-<!doctype html>
-<html lang="pt-PT">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Saúde na Menopausa — Algoritmo de Triagem</title>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#667085;--accent:#1769e0;--danger:#b42318;--line:#e4e7ec}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:linear-gradient(135deg,#101828,#1d2939);color:#fff;padding:56px 20px}
-.wrap{max-width:1050px;margin:auto} h1{font-size:clamp(32px,5vw,56px);margin:0 0 12px} h2{margin-top:42px}
-.subtitle{font-size:18px;color:#d0d5dd;max-width:780px;line-height:1.6}
-.notice{margin:28px 0;padding:16px 18px;border-radius:12px;background:#fff4e5;border:1px solid #ffd8a8;color:#7a4b00;line-height:1.5}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
-.module,.case{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(16,24,40,.05)}
-.module{padding:20px} .num{font-weight:800;color:var(--accent);font-size:13px;text-transform:uppercase}
-.module p{color:var(--muted);line-height:1.5}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
-input{flex:1;min-width:230px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;font-size:15px}
-button{font:inherit} .case{overflow:hidden} .case-head{width:100%;border:0;background:#fff;padding:18px 20px;display:flex;justify-content:space-between;text-align:left;cursor:pointer;font-weight:700;color:var(--ink)}
-.case-head:hover{background:#f9fafb} .plus{font-size:24px;color:var(--accent);line-height:18px} .case-body{display:none;padding:0 20px 20px;color:#475467;line-height:1.65} .case.open .case-body{display:block}
-.case.open .plus{transform:rotate(45deg)} footer{margin-top:60px;padding:30px 20px;background:#101828;color:#98a2b3}
-.small{font-size:13px;color:#98a2b3} .count{color:var(--muted);margin:8px 0 14px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triagem e Aconselhamento Farmacêutico Online</title>
+    <!-- Fonte Profissional (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .header {
+            background: #0284c7;
+            color: #ffffff;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Barra de Progresso */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            height: 6px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #0ea5e9;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            padding: 32px 24px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-option {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-option:hover {
+            border-color: #0284c7;
+            background-color: #f0f9ff;
+            color: #0369a1;
+        }
+
+        /* Botões Especiais de Sim/Não */
+        .btn-grid-binary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn-binary {
+            text-align: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 16px;
+        }
+
+        .btn-binary.yes:hover {
+            background-color: #f0fdf4;
+            border-color: #16a34a;
+            color: #15803d;
+        }
+
+        .btn-binary.no:hover {
+            background-color: #fef2f2;
+            border-color: #dc2626;
+            color: #b91c1c;
+        }
+
+        /* Resultado */
+        .result-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .result-card h3 {
+            font-size: 1.1rem;
+            color: #0369a1;
+            margin-bottom: 10px;
+        }
+
+        .result-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #334155;
+            margin-bottom: 10px;
+        }
+
+        .alert-box {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .alert-box p {
+            color: #991b1b;
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .btn-reset {
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: #0369a1;
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
 </head>
 <body>
-<header><div class="wrap">
-<h1>Saúde na Menopausa</h1>
-<div class="subtitle">Ferramenta interativa de demonstração do algoritmo exaustivo de triagem e apoio à decisão descrito no material fornecido.</div>
-</div></header>
-<main class="wrap">
-<div class="notice"><strong>Nota:</strong> este site reproduz o conteúdo fornecido como material de demonstração. Não substitui avaliação, diagnóstico ou orientação de um profissional de saúde.</div>
 
-<h2>Estrutura do algoritmo</h2>
-<div class="grid">
-<div class="module"><div class="num">Pergunta 1</div><h3>Alerta vermelho</h3><p>Rastreio de sinais de alarme clínicos.</p></div>
-<div class="module"><div class="num">Pergunta 2</div><h3>Idade e ciclo</h3><p>Caracterização etária e do ciclo menstrual.</p></div>
-<div class="module"><div class="num">Pergunta 3</div><h3>Histórico oncológico</h3><p>Rastreio de histórico de cancro.</p></div>
-<div class="module"><div class="num">Pergunta 4</div><h3>Sintomas vasomotores</h3><p>Afrontamentos e suores noturnos.</p></div>
-<div class="module"><div class="num">Pergunta 5</div><h3>SGM</h3><p>Secura vaginal, dispareunia e disúria.</p></div>
-<div class="module"><div class="num">Pergunta 6</div><h3>Sono e humor</h3><p>Insónia, irritabilidade e sintomas depressivos.</p></div>
-<div class="module"><div class="num">Pergunta 7</div><h3>Saúde óssea</h3><p>Rigidez articular, artralgia e osteoporose.</p></div>
+<div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+        <h1>🩺 Triagem Médica & Farmacêutica</h1>
+        <p>Avaliação preliminar de sintomas abdominais</p>
+    </div>
+
+    <!-- Barra de Progresso -->
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Conteúdo / Questionário -->
+    <div class="content">
+
+        <!-- Passo 1: Intensidade da Dor -->
+        <div class="step active" id="step1">
+            <h2 class="question-title">Qual é o nível de intensidade da sua dor de barriga?</h2>
+            <div class="options-grid">
+                <button class="btn-option" onclick="nextStep(1, 'leve')">Pouca dor (Ligeira / Desconforto) <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(1, 'moderada')">Dor moderada (Atrapalha o dia a dia) <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(1, 'intensa')">Muitas dores (Dor forte / Incapacitante) <span>→</span></button>
+            </div>
+        </div>
+
+        <!-- Passo 2: Quando começou -->
+        <div class="step" id="step2">
+            <h2 class="question-title">Quando é que a dor começou?</h2>
+            <div class="options-grid">
+                <button class="btn-option" onclick="nextStep(2, 'hoje')">Hoje (Há poucas horas) <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(2, 'dias')">Há 2 ou 3 dias <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(2, 'semana')">Há mais de uma semana <span>→</span></button>
+            </div>
+        </div>
+
+        <!-- Passo 3: Sintomas Acompanhantes -->
+        <div class="step" id="step3">
+            <h2 class="question-title">Apresenta algum destes sintomas adicionais?</h2>
+            <div class="options-grid">
+                <button class="btn-option" onclick="nextStep(3, 'enjoo')">Enjoos, náuseas ou azia <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(3, 'diarreia')">Diarreia ou cólicas mole <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(3, 'febre')">Febre, vómitos persistentes ou sangue <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(3, 'nenhum')">Nenhum destes <span>→</span></button>
+            </div>
+        </div>
+
+        <!-- Passo 4: Pergunta de Medicamentos (SIM / NÃO) -->
+        <div class="step" id="step4">
+            <h2 class="question-title">Está a tomar atualmente algum medicamento?</h2>
+            <div class="btn-grid-binary">
+                <button class="btn-option btn-binary yes" onclick="nextStep(4, 'sim')">Sim</button>
+                <button class="btn-option btn-binary no" onclick="nextStep(4, 'nao')">Não</button>
+            </div>
+        </div>
+
+        <!-- Passo Final: Resultado -->
+        <div class="step" id="stepResult">
+            <h2 class="question-title" style="text-align: center; margin-bottom: 15px;">Avaliação Farmacêutica</h2>
+            
+            <div class="result-card">
+                <h3>Recomendação e Cuidados:</h3>
+                <p id="recommendationText">A analisar as suas respostas...</p>
+            </div>
+
+            <div class="alert-box" id="alertBox">
+                <p id="alertText">⚠️ Se os sintomas persistirem ou piorarem, consulte um profissional de saúde.</p>
+            </div>
+
+            <br>
+            <button class="btn-reset" onclick="resetForm()">Fazer Nova Avaliação</button>
+        </div>
+
+        <div class="disclaimer">
+            Nota: Esta ferramenta é apenas informativa e simulada para apoio. Não substitui um diagnóstico médico oficial.
+        </div>
+    </div>
 </div>
 
-<h2>Casos de uso</h2>
-<div class="toolbar">
-<input id="search" placeholder="Pesquisar caso de uso..." aria-label="Pesquisar">
-</div>
-<div id="count" class="count">15 casos carregados</div>
-<section id="cases"><article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.2. Caso de Uso 1: Triagem com Presença de Sinais de Alarme (Sintoma Crítico)</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>Na Figura 4, ilustra-se o comportamento da aplicação quando o utilizador assinala uma resposta afirmativa logo na primeira pergunta de rastreio de segurança. A presença de hemorragia vaginal pós-menopáusica ou dor pélvica intensa exige o bloqueio imediato do algoritmo de automedicação e o encaminhamento urgente para os cuidados de saúde primários ou ginecologia. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. O utente apresenta sinais de hemorragia anormal ou dor pélvica aguda? Sim (Perdas de sangue pós-menopausa, metrorragia ou dor intensa) Não Fluxo de Respostas 1. Hemorragia / Dor Aguda: ➔ Sim Procedimento 🚨 ENCAMINHAMENTO MÉDICO URGENTE: Sinais de alarme detetados. O algoritmo foi interrompido. Recomenda-se consulta urgente de Ginecologia para exclusão de patologia endometrial/neoplásica. Figura 4 – Pergunta de Inicialização e Bloqueio de Segurança na Ferramenta &quot;Saúde na Menopausa&quot;, demonstrando o desvio direto para procedimento de urgência perante sinais de alarme.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.3. Caso de Uso 2: Suspeita de Menopausa Precoce (&amp;lt; 45 anos) sem Histórico Oncológico</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 5 demonstra a aplicação de uma utente com idade inferior a 45 anos e amenorreia. A ferramenta regista a suspeita de insuficiência ovariana prematura (IOP) e orienta para avaliação médica prévia, permitindo contudo o alívio temporário dos afrontamentos moderados com fitoestrogénios seguros. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. O utente apresenta sinais de hemorragia anormal ou dor pélvica aguda? Sim Não 2. Idade da utente e perfil do ciclo menstrual: Idade &lt; 45 anos com paragem menstrual súbita (Amenorreia) Idade ≥ 45 anos (Transição fisiológica natural) 3. Doente Oncológico ou Histórico de Cancro da Mama/Endométrio? Sim Não 4. Sintomas Vasomotores (Afrontamentos e Suores): Ausentes / Ligeiros Moderados (Vagas de calor diárias sem suores noturnos graves) Fluxo de Respostas 1. Hemorragia/Dor Aguda: Não 2. Perfil Etário: &lt; 45 Anos (Suspeita Menopausa Precoce) 3. Oncológico: Não 4. Afrontamentos: Moderados Procedimento ✅ PROCEDIMENTO E TERAPÊUTICA: • Avaliação Médica: Encaminhar para consulta médica para avaliação hormonal (FSH/Estradiol) e ponderação de THM. • Sintomático Vaso: Isoflavonas de Soja (50-80 mg/dia) ou Trevo Vermelho para controlo de afrontamentos. Figura 5 – Processo de decisão para utente com idade &lt; 45 anos e afrontamentos moderados, recomendando rastreio de menopausa precoce e terapêutica fitoestrogénica.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.4. Caso de Uso 3: Utente Oncológica com Sintomas Vasomotores Severos (Contraindicação Abstrata de Fitoestrogénios)</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 6 ilustra um caso clínico altamente relevante de uma utente com antecedente de neoplasia mamária estrogénio-dependente. A aplicação deteta a contraindicação formal de fitoestrogénios e recomenda alternativas seguras como o Extrato Purificado de Pólen. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. Sinais de Hemorragia / Dor Pélvica Aguda? Sim Não 2. Perfil Etário: Idade ≥ 45 anos 3. Doente Oncológico ou Histórico de Cancro da Mama/Endométrio? Sim (Histórico de Neoplasia / Em tratamento) Não 4. Sintomas Vasomotores: Severos (Afrontamentos intensos e suores noturnos) Fluxo de Respostas 1. Hemorragia: Não 2. Idade: ≥ 45 Anos 3. Oncológico: SIM (Contraindicação) 4. Afrontamentos: Severos Procedimento ✅ PROCEDIMENTO SEGURO ONS: • CONTRAINDICADO: Fitoestrogénios (Soja, Trevo Vermelho, Cimicífuga). • RECOMENDAÇÃO: Extrato de Pólen Purificado (Cytolysat 320mg/dia) + Vitamina E. Não possui atividade fitoestrogénica. • Medidas de vestuário em camadas e controlo térmico. Figura 6 – Algoritmo de decisão em doente oncológica, bloqueando fitoestrogénios e prescrevendo Extrato Purificado de Pólen não hormonal.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.5. Caso de Uso 4: Síndrome Geniturinária da Menopausa (SGM) – Secura e Dispareunia Ocasional</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 7 apresenta a abordagem para uma utente que apresenta queixas exclusivas de dor/desconforto durante as relações sexuais (dispareunia sintomática de secura estrogénica), sem sintomas vasomotores concomitantes. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. Sinais de Alarme (Hemorragia/Dor Aguda)? Não 2. Histórico Oncológico? Não 3. Sintomas Vasomotores (Afrontamentos): Ausentes ou Ligeiros 4. Caracterização da Secura Vaginal e Desconforto Intimo: Sem sintomas Desconforto ou dor apenas durante o ato sexual (Dispareunia) Secura constante e ardor diário ao caminhar Fluxo de Respostas 1. Alerta: Ausente 2. Oncológico: Não 3. Afrontamentos: Ausentes 4. Secura: Dispareunia no Coito Procedimento ✅ PROCEDIMENTO LOCAL SGM: • Lubrificante Vaginal Tópico: Aplicação imediata antes das relações sexuais. Recomendar fórmula à base de água ou silicone, compatível com preservativos e isento de fragrâncias. Figura 7 – Conduta para a Síndrome Geniturinária da Menopausa focada em dispareunia ocasional com lubrificante de ação imediata.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.6. Caso de Uso 5: Síndrome Geniturinária Grave – Secura Contínua, Ardor e Atrofia Vulvovaginal</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 8 ilustra o tratamento para uma utente com atrofia vulvovaginal acentuada, onde a secura provoca queimadura e dor contínua ao longo do dia. A ferramenta diferencia o tratamento de ação pontual do tratamento hidratante profundo. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 3. Rastreios Base de Segurança e Histórico: Sem Alertas / Sem Histórico Oncológico 4. Sintomas Vasomotores: Ausentes / Ligeiros 5. Caracterização da Secura Vaginal e Atrofia Intima: Desconforto ocasional Secura constante, ardor, comichão diária ou dor ao caminhar Fluxo de Respostas Alertas Base: Negativo Secura Intima: Contínua e Diária Procedimento ✅ PROCEDIMENTO HIDRATAÇÃO PROFUNDA: • Hidratante Vaginal Interno: Óvulos ou gel vaginal com Ácido Hialurónico + Policarbófilo (aplicar 2 a 3 vezes/semana à noite). • Higienização: Utilizar solução de higiene íntima com pH ácido (4.5 a 5.5) com agentes suavizantes (bisabolol). Figura 8 – Prescrição de reidratação estrutural vaginal com Ácido Hialurónico em casos de atrofia vulvovaginal contínua.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.7. Caso de Uso 6: Insónia de Inicialização e Alterações Ligeiras de Humor</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 9 demonstra o módulo de avaliação do sono e sistema nervoso central. A utente apresenta dificuldade em adormecer devido a estados de ansiedade amena e irritabilidade associados ao climatério. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 4. Rastreio de Sintomas Físicos e Vasomotores: Validados sem contraindicações 5. Qualidade do Sono, Ansiedade e Estado de Ânimo: Sono reparador e humor estável Dificuldade em adormecer, ansiedade amena ou irritabilidade Sintomas depressivos graves / labilidade emocional intensa Fluxo de Respostas Perfil Clínico: Estável Sono / Humor: Insónia / Ansiedade Ligeira Procedimento ✅ PROCEDIMENTO SONO E ANSIEDADE: • Melatonina (1.9 mg): Tomar 30 min antes de deitar para redução da latência do sono. • Fitoterapia Calmante: Extrato de Valeriana (300mg) ou Passiflora + Vitamina B6/Magnésio. • Recomendações de Higiene do Sono. Figura 9 – Terapêutica de suporte ao sono com Melatonina e Fitoterapia sedativa amena em quadros de insónia climatérica.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.8. Caso de Uso 7: Alerta de Saúde Mental – Sintomas Depressivos Graves</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 10 exibe a deteção de perturbações graves do humor (labilidade emocional intensa ou tristeza profunda). A aplicação emite uma recomendação de urgência médica para apoio psiquiátrico/psicológico. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 4. Rastreio Sintomático Geral: Sintomas Vasomotores Moderados 5. Qualidade do Sono, Ansiedade e Estado de Ânimo: Sintomas depressivos graves ou labilidade emocional intensa Fluxo de Respostas Sono / Humor: Sintomas Depressivos GRAVES Procedimento 🚨 ENCAMINHAMENTO SAÚDE MENTAL: Indícios de perturbação depressiva major na menopausa. Necessária consulta médica especializada (Psiquiatria/Psicologia). A automedicação com hipnóticos/calmantes é contraindicada. Figura 10 – Sinalização de alerta na área da saúde mental na menopausa com reencaminhamento médico imediato.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.9. Caso de Uso 8: Prevenção de Osteopenia e Artralgia Climatérica (Rigidez Matinal)</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 11 detalha o módulo locomotor para utentes com queixas articulares (artralgia da menopausa decorrente do défice estrogénico no colagénio), orientando para a suplementação óssea e articular. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 5. Avaliações Clínicas Prévias: Concluídas sem contraindicação 6. Presença de Dores Articulares e Perda de Força Muscular: Sem dores articulares Rigidez matinal e dores articulares amenas nas mãos/joelhos Diagnóstico confirmado de Osteoporose / Fratura prévia Fluxo de Respostas Articulações: Rigidez Matinal / Artralgia Procedimento ✅ SUPORTE ÓSSEO E ARTICULAR: • Vitamina D3: 2000 UI/dia + Cálcio (800-1000 mg/dia via dieta/suplemento). • Colagénio Hidrolisado Tipo II: 10g/dia com Vitamina C e Magnésio para cartilagens. • Exercício de resistência e força. Figura 11 – Abordagem terapêutica da artralgia climatérica e prevenção de osteopenia com Vitamina D3, Cálcio e Colagénio.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.10. Caso de Uso 9: Diagnóstico Confirmado de Osteoporose Estabelecida</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 12 apresenta o comportamento do sistema perante o diagnóstico prévio de osteoporose instalada, onde a suplementação de venda livre atua exclusivamente como adjuvante da terapêutica farmacológica prescrita. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 5. Triagem Geral: Validada 6. Presença de Dores Articulares e Osteoporose: Diagnóstico confirmado de Osteoporose ou fratura de fragilidade Fluxo de Respostas Saúde Óssea: Osteoporose Confirmada Procedimento ✅ PROCEDIMENTO ADJUVANTE: • Acompanhamento Médico: Manter medicação antireabsorutiva prescrita (Bisfosfonatos/Denosumab). • Suplementação Obrigatória: Vitamina D3 (2000 UI) + Citrato de Cálcio (1200 mg/dia) + Vitamina K2 (MK-7) para fixação óssea. Figura 12 – Orientação adjuvante para osteoporose confirmada, reforçando a adesão à terapêutica prescrita e suplementação com D3/K2.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.11. Caso de Uso 10: Perfil Combinado Severo (Afrontamentos Severos + Secura Vaginal Diária + Insónia)</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 13 demonstra uma simulação complexa de alta sobreposição sintomática. A ferramenta agrega as intervenções não hormonais num plano terapêutico holístico estruturado. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 3. Rastreio de Segurança e Cancro: Não Oncológica / Sem Alertas 4. Sintomas Vasomotores: Severos (Afrontamentos e Suores Noturnos) 5. Secura Vaginal: Secura contínua e ardor diário 6. Qualidade do Sono: Dificuldade em adormecer / Insónia Fluxo de Respostas Afrontamentos: Severos Secura Intima: Contínua Sono: Insónia Procedimento ✅ PLANO TERAPÊUTICO INTEGRAL: 1. Sistémico: Isoflavonas de Soja (80mg) + Vitamina B6 de manhã. 2. Tópico Local: Óvulos com Ácido Hialurónico à noite (3x/semana). 3. Sono: Melatonina (1.9mg) ao deitar. 4. Reavaliar ao fim de 4 a 6 semanas. Figura 13 – Integração de plano terapêutico multissintomático para controlo simultâneo de afrontamentos, atrofia íntima e distúrbios do sono.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.12. Caso de Uso 11: Perfil Combinado em Doente Oncológica com Multissintomatologia</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 14 simula a utente oncológica com múltiplos sintomas (afrontamentos severos, secura vaginal e insónia). O algoritmo aplica restrições estritas mantendo soluções terapêuticas não estrogénicas ativas. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. Histórico Oncológico: SIM (Cancro da Mama / Sob Tamoxifeno ou Anastrozol) 2. Sintomas Vasomotores: Severos 3. Secura Vaginal e Sono: Secura Contínua + Dificuldade em adormecer Fluxo de Respostas Oncológico: SIM (Restrição Total) Sintomas: Múltiplos / Severos Procedimento ✅ PLANO ONCOLÓGICO SEGURO: 1. Afrontamentos: Extrato de Pólen Purificado (Sem atividade estrogénica). 2. Secura Intima: Hidratante vaginal com ácido hialurónico ISENTO de hormonas. 3. Sono: Melatonina isolada 1.9 mg. Figura 14 – Algoritmo de segurança para utente oncológica multissintomática, garantindo a ausência total de fitoestrogénios.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.13. Caso de Uso 12: Utente Assintomática – Rastreio de Rotina e Aconselhamento de Estilo de Vida</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 15 demonstra a conduta da aplicação para utentes na menopausa que não apresentam sintomas perturbadores significativos, direcionando para a promoção da saúde e prevenção primária cardiovascular e óssea. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1 a 7. Avaliação Exaustiva de Todos os Sintomas: Ausentes ou Muito Ligeiros em todos os parâmetros Fluxo de Respostas Perfil Global: Assintomática Procedimento ✅ PROMOÇÃO DA SAÚDE: • Sem Indicação de Tratamento Farmacológico/Fitoterapêutico. • Alimentação mediterrânica rica em cálcio e fitoesteróis. • Prática regular de exercício físico (150 min/semana). • Manter mamografia e citologia cervico-vaginal de rotina. Figura 15 – Recomendações de hábitos de vida saudáveis e rastreios preventivos para utentes assintomáticas.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.14. Caso de Uso 13: Manejo da Transição Perimenopáusica (Ciclos Irregulares e Afrontamentos Amenos)</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 16 aborda a fase inicial da transição climatérica (perimenopausa), caracterizada por flutuações hormonais e irregularidade menstrual sem paragem definitiva. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. Estado do Ciclo: Irregularidades menstruais com afrontamentos ocasionais 2. Histórico Oncológico: Não Fluxo de Respostas Fase: Perimenopausa Inicial Procedimento ✅ CONDUTA NA PERIMENOPAUSA: • Óleo de Onagra (1000 mg/dia): Rico em ácido gamma-linolénico (GLA) para regulação sintomática do desconforto mamário e tensão pré-menstrual. • Reforço de antioxidantes (Vitamina E e Zinco). Figura 16 – Intervenção sintomática na perimenopausa inicial orientada para o equilíbrio de ácidos gordos essenciais e regulação do ciclo.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.15. Caso de Uso 14: Avaliação de Suplementação Prolongada (Acompanhamento e Reavaliação a 6 Meses)</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>A Figura 17 ilustra o módulo de acompanhamento a longo prazo para utentes que já utilizam fitoestrogénios há mais de 6 meses, verificando a necessidade de pausa terapêutica ou reavaliação clínica. Material de Triagem - Saúde na Menopausa ─ ❏ ✕ 1. Tempo de Toma Continua de Suplementos / Fitoestrogénios: Superior a 6 meses de utilização ininterrupta Fluxo de Respostas Acompanhamento: &gt; 6 Meses de Uso Procedimento ✅ REAVALIAÇÃO DE SEGURANÇA: • Fazer pausa terapêutica de 1 mês para avaliar o reaparecimento de sintomas. • Agendar reavaliação da densidade mineral óssea e perfil lipídico. • Confirmar realização de mamografia anual de controlo. Figura 17 – Protocolo de seguimento e segurança a longo prazo na utilização contínua de suplementação fitoterapêutica na menopausa.</p></div>
-    </article>
-<article class="case">
-      <button class="case-head" aria-expanded="false">
-        <span>3.2.16. Caso de Uso 15: Mapeamento Global e Visão Completa da Árvore de Decisão</span><span class="plus">+</span>
-      </button>
-      <div class="case-body"><p>Por fim, a Figura 18 apresenta a consolidação e estado de prontidão total da ferramenta &quot;Saúde na Menopausa&quot;, evidenciando a capacidade de resposta imediata a qualquer permutação clínica em ambiente de atendimento real. Material de Triagem - Saúde na Menopausa v2.0 (Ambiente Completo) ─ ❏ ✕ Todas as Pergunas de Triagem Ativas (1 a 7): 1. Hemorragia / Dor: Não 2. Idade / Ciclo: ≥ 45 Anos (Transição Fisiológica) 3. Histórico Oncológico: Não 4. Sintomas Vasomotores: Moderados 5. Secura Vaginal: No Coito e Diária 6. Sono e Humor: Insónia Ligeira 7. Saúde Óssea: Rigidez Articular Matinal Fluxo de Respostas Completo 1. Alerta: Ausente 2. Histórico: Sem Cancro 3. Afrontamentos: Moderados 4. Secura: Mista 5. Sono/Articulações: Afetados Procedimento Global ✅ RECOMENDAÇÃO COMPLETA: • Isoflavonas (60mg) + Vit. B6 • Óvulos Ácido Hialurónico (3x/sem) • Melatonina (1.9mg) + Vitamina D3 (2000 UI) Figura 18 – Demonstração da aplicação em estado de triagem completa multissintomática com resolução automatizada de intervenções.</p></div>
-    </article></section>
-</main>
-<footer><div class="wrap">
-<strong>Saúde na Menopausa</strong>
-<p class="small">Interface criada a partir do conteúdo fornecido pelo utilizador. Para utilização clínica real, o conteúdo deve ser validado por profissionais qualificados.</p>
-</div></footer>
 <script>
-const cards=[...document.querySelectorAll('.case')];
-cards.forEach(card=>{
- const b=card.querySelector('.case-head');
- b.addEventListener('click',()=>{
-   const open=card.classList.toggle('open');
-   b.setAttribute('aria-expanded',open);
- });
-});
-const search=document.getElementById('search'), count=document.getElementById('count');
-search.addEventListener('input',()=>{
- const q=search.value.toLowerCase().trim(); let n=0;
- cards.forEach(c=>{
-   const ok=c.innerText.toLowerCase().includes(q); c.style.display=ok?'':'none'; if(ok)n++;
- });
- count.textContent=n+' caso'+(n===1?'':'s')+' encontrado'+(n===1?'':'s');
-});
+    // Guardar respostas
+    let userAnswers = {
+        intensidade: '',
+        inicio: '',
+        sintomas: '',
+        tomaMedicamento: ''
+    };
+
+    const totalSteps = 4;
+
+    function updateProgress(currentStep) {
+        const percentage = ((currentStep - 1) / totalSteps) * 100;
+        document.getElementById('progressBar').style.width = percentage + '%';
+    }
+
+    function nextStep(currentStep, answer) {
+        // Guardar resposta do passo atual
+        if (currentStep === 1) userAnswers.intensidade = answer;
+        if (currentStep === 2) userAnswers.inicio = answer;
+        if (currentStep === 3) userAnswers.sintomas = answer;
+        if (currentStep === 4) userAnswers.tomaMedicamento = answer;
+
+        // Ocultar passo atual
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+
+        // Avançar para o próximo
+        if (currentStep < totalSteps) {
+            const next = currentStep + 1;
+            document.getElementById(`step${next}`).classList.add('active');
+            updateProgress(next);
+        } else {
+            // Chegou ao fim, mostra o resultado
+            document.getElementById('progressBar').style.width = '100%';
+            showResults();
+        }
+    }
+
+    function showResults() {
+        document.getElementById('stepResult').classList.add('active');
+        
+        const recText = document.getElementById('recommendationText');
+        const alertBox = document.getElementById('alertBox');
+        const alertText = document.getElementById('alertText');
+
+        // Lógica Farmacêutica
+        if (userAnswers.intensidade === 'intensa' || userAnswers.sintomas === 'febre') {
+            recText.innerHTML = "<strong>Atenção:</strong> Devido à intensidade da dor ou à presença de sintomas de alerta (como febre ou vómitos), <strong>não deve tomar medicação por iniciativa própria</strong> sem avaliação clínica.";
+            alertText.innerHTML = "🔴 <strong>CONSULTE UM MÉDICO:</strong> Medicamentos como antibióticos ou analgésicos fortes necessitam obrigatoriamente de receita e diagnóstico médico. Dirija-se a um centro de saúde ou urgência.";
+            alertBox.style.backgroundColor = "#fef2f2";
+            alertBox.style.borderColor = "#ef4444";
+        } 
+        else if (userAnswers.sintomas === 'enjoo') {
+            recText.innerHTML = "Para desconforto gástrico e azia ligeira, é recomendado repouso digestivo, hidratação e, se necessário, o uso de um antiaçido ou protetor gástrico de venda livre recomendado na farmácia.";
+            alertText.innerHTML = "💡 Se estiver a tomar outros medicamentos, confirme com o farmacêutico para evitar interações.";
+            alertBox.style.backgroundColor = "#eff6ff";
+            alertBox.style.borderColor = "#3b82f6";
+        } 
+        else if (userAnswers.sintomas === 'diarreia') {
+            recText.innerHTML = "Recomenda-se reforçar a hidratação com água ou soluções de reidratação oral. Evite alimentos gordurosos ou com lactose nas próximas horas.";
+            alertText.innerHTML = "💡 Se a diarreia persistir por mais de 48h ou for acompanhada de febre, consulte um médico antes de tomar qualquer medicação.";
+            alertBox.style.backgroundColor = "#fffbe0";
+            alertBox.style.borderColor = "#f59e0b";
+        } 
+        else {
+            recText.innerHTML = "Para dores ligeiras e pontuais, repousar e beber chá de camomila ou infusões suaves pode ajudar a relaxar a musculatura abdominal.";
+            alertText.innerHTML = "ℹ️ Caso a dor não passe em 24h a 48h, consulte um farmacêutico ou médico.";
+            alertBox.style.backgroundColor = "#f0fdf4";
+            alertBox.style.borderColor = "#22c55e";
+        }
+    }
+
+    function resetForm() {
+        // Limpar respostas
+        userAnswers = { intensidade: '', inicio: '', sintomas: '', tomaMedicamento: '' };
+        
+        // Esconder o resultado
+        document.getElementById('stepResult').classList.remove('active');
+        
+        // Voltar ao passo 1
+        document.getElementById('step1').classList.add('active');
+        updateProgress(1);
+    }
+
+    // Inicializa a barra de progresso no arranque
+    updateProgress(1);
 </script>
+
 </body>
 </html>
