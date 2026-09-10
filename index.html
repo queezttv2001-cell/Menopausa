@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliação de Sintomas Abdominais | Portal de Saúde</title>
-    <!-- Fonte Oficial e Limpa -->
+    <title>Algoritmo de Apoio à Decisão - Menopausa</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #006699;       /* Azul Clínico/SNS */
+            --primary: #006699;
             --primary-dark: #004d73;
-            --secondary: #00a88f;     /* Verde Saúde */
+            --secondary: #00a88f;
             --bg-body: #f4f7f9;
             --card-bg: #ffffff;
             --text-main: #2c3e50;
@@ -37,10 +36,9 @@
             padding: 20px 15px;
         }
 
-        /* Topo Institucional (Estilo SNS 24) */
         .top-bar {
             width: 100%;
-            max-width: 680px;
+            max-width: 720px;
             background-color: var(--primary);
             color: #ffffff;
             padding: 12px 20px;
@@ -51,21 +49,12 @@
             align-items: center;
             font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
 
-        .top-bar .emergency-notice {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        /* Contentor Principal */
         .container {
             background: var(--card-bg);
             width: 100%;
-            max-width: 680px;
+            max-width: 720px;
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
@@ -74,58 +63,26 @@
             overflow: hidden;
         }
 
-        /* Banner de Serviço */
         .header-hero {
             background: linear-gradient(135deg, #006699 0%, #00a88f 100%);
             color: white;
-            padding: 28px 24px;
+            padding: 24px;
             text-align: center;
         }
 
         .header-hero h1 {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .header-hero p {
-            font-size: 0.95rem;
-            opacity: 0.92;
-            max-width: 500px;
-            margin: 0 auto;
+            font-size: 0.9rem;
+            opacity: 0.95;
         }
 
-        /* Barra de Progresso Passos */
-        .progress-container {
-            width: 100%;
-            background-color: #e9ecef;
-            height: 6px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--secondary);
-            width: 25%;
-            transition: width 0.3s ease;
-        }
-
-        /* Área do Formulario */
         .content {
-            padding: 32px 24px;
-        }
-
-        .step {
-            display: none;
-        }
-
-        .step.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: 28px 24px;
         }
 
         .step-tag {
@@ -139,14 +96,13 @@
         }
 
         .question-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             line-height: 1.4;
         }
 
-        /* Opções de Seleção */
         .options-list {
             display: flex;
             flex-direction: column;
@@ -156,9 +112,9 @@
         .btn-option {
             background: #ffffff;
             border: 2px solid var(--border);
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 600;
             color: var(--text-main);
             cursor: pointer;
@@ -176,7 +132,6 @@
             color: var(--primary);
         }
 
-        /* Pergunta Sim/Não */
         .binary-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -187,7 +142,7 @@
             text-align: center;
             justify-content: center;
             font-size: 1.1rem;
-            padding: 18px;
+            padding: 16px;
         }
 
         .btn-binary.yes:hover {
@@ -202,35 +157,24 @@
             color: #b91c1c;
         }
 
-        /* Card de Resultado Final */
         .result-box {
             background-color: #f8fafc;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 24px;
+            padding: 20px;
             margin-bottom: 20px;
         }
 
         .result-box h3 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--primary);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .result-box p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #334155;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .notice-card {
             padding: 16px;
             border-radius: 8px;
-            margin-top: 16px;
+            margin-top: 12px;
             font-size: 0.95rem;
             line-height: 1.5;
         }
@@ -241,7 +185,7 @@
             color: #991b1b;
         }
 
-        .notice-card.pharmacy {
+        .notice-card.success {
             background-color: #f0fdf4;
             border-left: 5px solid var(--secondary);
             color: #166534;
@@ -258,201 +202,376 @@
             font-weight: 700;
             cursor: pointer;
             transition: background 0.2s;
-            margin-top: 10px;
         }
 
         .btn-restart:hover {
             background-color: var(--primary-dark);
         }
 
-        /* Rodapé de Isenção */
         .disclaimer {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             text-align: center;
-            margin-top: 24px;
-            padding-top: 16px;
+            margin-top: 20px;
+            padding-top: 14px;
             border-top: 1px solid var(--border);
-            line-height: 1.4;
-        }
-
-        @media (max-width: 480px) {
-            .binary-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Barra de Cabeçalho Institucional -->
     <div class="top-bar">
-        <span>SERVIÇO DE TRIAGEM ONLINE</span>
-        <span class="emergency-notice">Em emergência ligue 112</span>
+        <span>ALGORITMO DE DECISÃO CLÍNICA</span>
+        <span>SAÚDE NA MENOPAUSA</span>
     </div>
 
     <div class="container">
-        <!-- Hero Banner -->
         <div class="header-hero">
-            <h1>Avaliação e Orientação de Sintomas</h1>
-            <p>Aconselhamento clínico preliminar e encaminhamento farmacêutico</p>
+            <h1>Aconselhamento de Produtos de Saúde na Menopausa</h1>
+            <p>Triagem orientada segundo o protocolo oficial de intervenção farmacêutica</p>
         </div>
 
-        <!-- Progresso -->
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <!-- Conteúdo do Formuário -->
-        <div class="content">
-
-            <!-- PASSO 1: Intensidade -->
-            <div class="step active" id="step1">
-                <span class="step-tag">Passo 1 de 4</span>
-                <h2 class="question-title">Qual é o nível de intensidade da sua dor de barriga?</h2>
-                <div class="options-list">
-                    <button class="btn-option" onclick="nextStep(1, 'pouca')">Pouca dor (Ligeira / Desconforto abdominal) <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(1, 'moderada')">Dor moderada (Dificulta as atividades diárias) <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(1, 'muita')">Muitas dores (Dor intensa / Forte / Incapacitante) <span>→</span></button>
-                </div>
-            </div>
-
-            <!-- PASSO 2: Início -->
-            <div class="step" id="step2">
-                <span class="step-tag">Passo 2 de 4</span>
-                <h2 class="question-title">Há quanto tempo começaram os sintomas?</h2>
-                <div class="options-list">
-                    <button class="btn-option" onclick="nextStep(2, 'hoje')">Começou hoje (Há poucas horas) <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(2, 'dias')">Há 2 a 3 dias <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(2, 'semana')">Há mais de uma semana <span>→</span></button>
-                </div>
-            </div>
-
-            <!-- PASSO 3: Sintomas Acompanhantes -->
-            <div class="step" id="step3">
-                <span class="step-tag">Passo 3 de 4</span>
-                <h2 class="question-title">Apresenta algum destes sintomas acompanhantes?</h2>
-                <div class="options-list">
-                    <button class="btn-option" onclick="nextStep(3, 'azia')">Azia, sensação de enfartamento ou enjoos <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(3, 'diarreia')">Diarreia ou cólicas intestinais <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(3, 'alerta')">Febre alta, vómitos persistentes ou sangue nas fezes <span>→</span></button>
-                    <button class="btn-option" onclick="nextStep(3, 'nenhum')">Nenhum destes sintomas <span>→</span></button>
-                </div>
-            </div>
-
-            <!-- PASSO 4: Medicação Atual (SIM / NÃO) -->
-            <div class="step" id="step4">
-                <span class="step-tag">Passo 4 de 4</span>
-                <h2 class="question-title">Está a tomar atualmente algum medicamento?</h2>
-                <div class="binary-grid">
-                    <button class="btn-option btn-binary yes" onclick="nextStep(4, 'sim')">Sim</button>
-                    <button class="btn-option btn-binary no" onclick="nextStep(4, 'nao')">Não</button>
-                </div>
-            </div>
-
-            <!-- PASSO FINAL: Resultado -->
-            <div class="step" id="stepResult">
-                <h2 class="question-title" style="text-align: center; margin-bottom: 16px;">Recomendações e Encaminhamento</h2>
-                
-                <div class="result-box">
-                    <h3>🩺 Orientação Clínica:</h3>
-                    <p id="resultText">A processar os dados da triagem...</p>
-                    
-                    <div id="noticeContainer" class="notice-card"></div>
-                </div>
-
-                <button class="btn-restart" onclick="restartTriagem()">Fazer Nova Avaliação</button>
-            </div>
-
-            <div class="disclaimer">
-                <strong>Aviso de Saúde Pública:</strong> Esta ferramenta disponibiliza apenas uma orientação preliminar e não substitui um diagnóstico clínico prestado por um médico ou farmacêutico.
-            </div>
+        <div class="content" id="appContent">
+            <!-- Renderizado dinamicamente via JS -->
         </div>
     </div>
 
     <script>
-        // Objeto para registar as respostas
-        const answers = {
-            intensidade: '',
-            inicio: '',
-            sintomas: '',
-            medicamento: ''
+        const treeData = {
+            start: {
+                tag: "Triagem Inicial",
+                title: "A utente apresenta sintomas associados à menopausa?",
+                options: [
+                    { text: "Sim", next: "q_idade" },
+                    { text: "Não", result: "Sem indicação para aplicação do protocolo de menopausa. Avaliar outras queixas da utente." }
+                ]
+            },
+            q_idade: {
+                tag: "Avaliação de Idade",
+                title: "A utente tem idade inferior a 45 anos?",
+                binary: true,
+                yes: { result: "Encaminhamento médico para avaliação de menopausa precoce (<45 anos) ou Insuficiência ovárica prematura (<40 anos).", urgent: true },
+                no: { next: "q_menqol" }
+            },
+            q_menqol: {
+                tag: "Avaliação de Impacto (MENQOL)",
+                title: "Aplicar MENQOL para avaliar sintomas e respetivo impacto na qualidade de vida.<br><br>Os sintomas são graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
+                binary: true,
+                yes: { result: "Encaminhamento para consulta médica.", urgent: true },
+                no: { next: "q_predominante" }
+            },
+            q_predominante: {
+                tag: "Sintoma Principal",
+                title: "Qual é o sintoma predominante ou principal queixa da utente?",
+                options: [
+                    { text: "1. Sintomas Vasomotores (Afrontamentos / Suores noturnos)", next: "vasomotores_1" },
+                    { text: "2. Sintomas Geniturinários", next: "genitu_1" },
+                    { text: "3. Saúde Óssea", next: "ossea_1" },
+                    { text: "4. Perturbações do Sono", next: "sono_1" },
+                    { text: "5. Alterações Psicológicas", next: "psico_1" },
+                    { text: "6. Alterações Cognitivas", next: "cog_1" },
+                    { text: "7. Alterações Metabólicas", next: "meta_1" },
+                    { text: "8. Alterações Cutâneas", next: "cut_1" }
+                ]
+            },
+
+            /* 1. VASOMOTORES */
+            vasomotores_1: {
+                tag: "Vasomotores",
+                title: "Histórico de cancro forte estrogénio-dependente?",
+                binary: true,
+                yes: { result: "Não aconselhar fitoestrogénios sem avaliação médica.", urgent: true },
+                no: { next: "vasomotores_2" }
+            },
+            vasomotores_2: {
+                tag: "Vasomotores",
+                title: "A utente é fumadora?",
+                binary: true,
+                yes: { next: "vasomotores_3" },
+                no: { next: "vasomotores_4" }
+            },
+            vasomotores_3: {
+                tag: "Vasomotores",
+                title: "Informar sobre o possível agravamento dos sintomas vasomotores e promover a cessação tabágica.<br><br>Pretende limitação a alterações do estilo de vida / não farmacológica?",
+                binary: true,
+                yes: { next: "vasomotores_4" },
+                no: { result: "Considerar extrato de pólen purificado (ou 40 mg extrato cimicifuga/dia + 120 mg extrato de pimenteiro)." }
+            },
+            vasomotores_4: {
+                tag: "Vasomotores",
+                title: "Pretende limitação a alterações da estilo de vida / não farmacológica?",
+                binary: true,
+                yes: { result: "Considerar Isoflavonas de soja (Glycine max) 40-80 mg/dia." },
+                no: { next: "vasomotores_5" }
+            },
+            vasomotores_5: {
+                tag: "Vasomotores",
+                title: "Tem patologia hepática?",
+                binary: true,
+                yes: { result: "Evitar área de simicifuga (Cimicifuga racemosa). Considerar Extrato de Pólen purificado.", urgent: true },
+                no: { result: "Considerar Extrato de Pólen purificado ou (ou 40 mg extrato cimicifuga/dia + 120 mg extrato de pimenteiro)." }
+            },
+
+            /* 2. GENITURINÁRIOS */
+            genitu_1: {
+                tag: "Geniturinários",
+                title: "Apresenta hemorragia pós-menopausa?",
+                binary: true,
+                yes: { result: "Encaminhamento médico imediato.", urgent: true },
+                no: { next: "genitu_2" }
+            },
+            genitu_2: {
+                tag: "Geniturinários",
+                title: "Apresenta sintomas sugestivos de infeção urinária ou candidíase?",
+                binary: true,
+                yes: { result: "Encaminhamento médico.", urgent: true },
+                no: { next: "genitu_3" }
+            },
+            genitu_3: {
+                tag: "Geniturinários",
+                title: "Aconselhar higiene íntima adequada e evitar produtos potencialmente irritantes.<br><br>Apresenta secura, ardor ou desconforto vaginal?",
+                binary: true,
+                yes: { result: "Hidratantes Vaginais Não Hormonais (com ácido hialurónico, fitoestrogénios, pectina). Utilização regular, 2 a 3 vezes por semana ou de acordo com a necessidade." },
+                no: { next: "genitu_4" }
+            },
+            genitu_4: {
+                tag: "Geniturinários",
+                title: "Existe dor/desconforto apenas no coito (Dispareunia)?",
+                binary: true,
+                yes: { result: "Lubrificantes vaginais (Verificar compatibilidade com preservativos de látex). Utilizar durante a atividade sexual." },
+                no: { result: "Reavaliar sintomatologia." }
+            },
+
+            /* 3. SAÚDE ÓSSEA */
+            ossea_1: {
+                tag: "Saúde Óssea",
+                title: "Diagnóstico de Osteoporose ou Osteopenia?",
+                binary: true,
+                yes: { result: "Encaminhamento médico e reforço das medidas não farmacológicas de suporte à saúde óssea.", urgent: true },
+                no: { next: "ossea_2" }
+            },
+            ossea_2: {
+                tag: "Saúde Óssea",
+                title: "Apresenta fratura por fragilidade?",
+                binary: true,
+                yes: { result: "Considerar Risco de Queda e fraturas e encaminhamento médico.", urgent: true },
+                no: { next: "ossea_3" }
+            },
+            ossea_3: {
+                tag: "Saúde Óssea",
+                title: "Apresenta dor articular?",
+                binary: true,
+                yes: { result: "Avaliação da causa, intensidade, duração e impacto funcional. Encaminhamento médico se necessário." },
+                no: { next: "ossea_4" }
+            },
+            ossea_4: {
+                tag: "Saúde Óssea",
+                title: "Ingestão diária de Cálcio insuficiente (< 1000 mg/dia)?",
+                binary: true,
+                yes: { result: "Aconselhar suplemento de Cálcio para complementar a ingestão diária." },
+                no: { next: "ossea_5" }
+            },
+            ossea_5: {
+                tag: "Saúde Óssea",
+                title: "Níveis de Vitamina D3 inadequados (< 20 ng/mL)?",
+                binary: true,
+                yes: { result: "Aconselhar suplementação com Vitamina D3 (800-1000 UI/dia)." },
+                no: { result: "Manter aporte adequado de cálcio e Vitamina D3." }
+            },
+
+            /* 4. SONO */
+            sono_1: {
+                tag: "Perturbações do Sono",
+                title: "Está associada a afrontamentos e/ou suores noturnos?",
+                binary: true,
+                yes: { result: "Priorizar o alívio dos sintomas vasomotores (ver algoritmo de sintomas vasomotores)." },
+                no: { next: "sono_2" }
+            },
+            sono_2: {
+                tag: "Perturbações do Sono",
+                title: "Apresenta características sugestivas de insónia inicial ou secundária? (p.ex., tonturas, palpitações, ansiedade)",
+                binary: true,
+                yes: { result: "Encaminhamento médico.", urgent: true },
+                no: { next: "sono_3" }
+            },
+            sono_3: {
+                tag: "Perturbações do Sono",
+                title: "Sintomas de ansiedade, stress ou alterações do humor?",
+                binary: true,
+                yes: { result: "Considerar medidas de higiene do sono e suplementar Melatonina ou Valeriana/Passiflora." },
+                no: { result: "Considerar medidas de higiene do sono e suplementar Melatonina." }
+            },
+
+            /* 5. PSICOLÓGICAS */
+            psico_1: {
+                tag: "Alterações Psicológicas",
+                title: "Alteração marcada da personalidade, depressão ou ideação suicida?",
+                binary: true,
+                yes: { result: "Encaminhamento médico urgente.", urgent: true },
+                no: { next: "psico_2" }
+            },
+            psico_2: {
+                tag: "Alterações Psicológicas",
+                title: "Apresenta instabilidade de humor?",
+                binary: true,
+                yes: { result: "Medidas gerais de suporte: exercício físico, sono, gestão do stress e apoio psicológico." },
+                no: { next: "psico_3" }
+            },
+            psico_3: {
+                tag: "Alterações Psicológicas",
+                title: "Suspeita de défice funcional ou ingestão alimentar insuficiente da vitamina B12?",
+                binary: true,
+                yes: { next: "psico_4" },
+                no: { result: "Manter medidas gerais de suporte." }
+            },
+            psico_4: {
+                tag: "Alterações Psicológicas",
+                title: "Défice confirmado?",
+                binary: true,
+                yes: { result: "Considerar vitaminas do complexo B." },
+                no: { result: "Manter medidas gerais de suporte." }
+            },
+
+            /* 6. COGNITIVAS */
+            cog_1: {
+                tag: "Alterações Cognitivas",
+                title: "Sintomas graves e/ou incapacitantes?",
+                binary: true,
+                yes: { result: "Encaminhamento médico.", urgent: true },
+                no: { next: "cog_2" }
+            },
+            cog_2: {
+                tag: "Alterações Cognitivas",
+                title: "Alterações cognitivas ligeiras ou queixas de memória?",
+                binary: true,
+                yes: { next: "cog_3" },
+                no: { result: "Reforçar medidas de higiene do sono e gestão do stress." }
+            },
+            cog_3: {
+                tag: "Alterações Cognitivas",
+                title: "Consumo adequado de peixe gordo? (1 a 2 vezes por semana)",
+                binary: true,
+                yes: { result: "Manter aporte alimentar." },
+                no: { result: "Considerar suplementação com Omega 3 (DHA e EPA)." }
+            },
+
+            /* 7. METABÓLICAS */
+            meta_1: {
+                tag: "Alterações Metabólicas",
+                title: "Índice de Massa Corporal (IMC) >= 27?",
+                binary: true,
+                yes: { result: "Considerar perda de peso, sugerir consulta de nutrição, exercício regular de força e aeróbico." },
+                no: { next: "meta_2" }
+            },
+            meta_2: {
+                tag: "Alterações Metabólicas",
+                title: "Triglicéridos altos ou Risco Cardiovascular Elevado?",
+                binary: true,
+                yes: { result: "Omega 3 para reduzir a gordura visceral e proteger o coração." },
+                no: { next: "meta_3" }
+            },
+            meta_3: {
+                tag: "Alterações Metabólicas",
+                title: "Diabetes Mellitus 2?",
+                binary: true,
+                yes: { result: "Encaminhar para consulta médica.", urgent: true },
+                no: { result: "Manter estilo de vida saudável e monitorização regular." }
+            },
+
+            /* 8. CUTÂNEAS */
+            cut_1: {
+                tag: "Alterações Cutâneas",
+                title: "Uso de Proteção Solar Diária (Prevenção de Fotoenvelhecimento)?",
+                binary: true,
+                yes: { next: "cut_2" },
+                no: { result: "Aconselhar uso diário de fotoprotetor de amplo espectro (FPS 30-50+)." }
+            },
+            cut_2: {
+                tag: "Alterações Cutâneas",
+                title: "Apresenta rugas finas ou flacidez?",
+                binary: true,
+                yes: { result: "Aconselhar a cosmética adequada: estimula lipídica e produção de colagénio. Aconselhar emoliantes de base pH e Ácido Hialurónico tópico para reter humidade." },
+                no: { next: "cut_3" }
+            },
+            cut_3: {
+                tag: "Alterações Cutâneas",
+                title: "Perda de densidade/firmeza na pele?",
+                binary: true,
+                yes: { result: "Considerar dermocosméticos que estimulem a síntese de colagénio e inibidores de impacto negativo da menopausa cutânea." },
+                no: { next: "cut_4" }
+            },
+            cut_4: {
+                tag: "Alterações Cutâneas",
+                title: "Apresenta queda de cabelo ou perda de volume capilar?",
+                binary: true,
+                yes: { result: "Dermocosméticos capilares (p.ex. minoxidil/champôs fortificantes) e Suplementar vitaminas do complexo B, zinco e aminoácidos." },
+                no: { result: "Manter rotina dermocosmética habitual." }
+            }
         };
 
-        const totalSteps = 4;
+        function renderNode(nodeKey) {
+            const app = document.getElementById('appContent');
+            const node = treeData[nodeKey];
 
-        function updateProgress(step) {
-            const percentage = (step / totalSteps) * 100;
-            document.getElementById('progressBar').style.width = percentage + '%';
+            if (!node) return;
+
+            let html = `<span class="step-tag">${node.tag}</span>`;
+            html += `<h2 class="question-title">${node.title}</h2>`;
+
+            if (node.binary) {
+                html += `
+                    <div class="binary-grid">
+                        <button class="btn-option btn-binary yes" onclick="handleSelect('${nodeKey}', 'yes')">Sim</button>
+                        <button class="btn-option btn-binary no" onclick="handleSelect('${nodeKey}', 'no')">Não</button>
+                    </div>
+                `;
+            } else if (node.options) {
+                html += `<div class="options-list">`;
+                node.options.forEach((opt, idx) => {
+                    html += `<button class="btn-option" onclick="handleSelect('${nodeKey}', ${idx})">${opt.text} <span>→</span></button>`;
+                });
+                html += `</div>`;
+            }
+
+            app.innerHTML = html;
         }
 
-        function nextStep(currentStep, value) {
-            // Guardar a resposta do passo atual
-            if (currentStep === 1) answers.intensidade = value;
-            if (currentStep === 2) answers.inicio = value;
-            if (currentStep === 3) answers.sintomas = value;
-            if (currentStep === 4) answers.medicamento = value;
+        function handleSelect(nodeKey, choice) {
+            const node = treeData[nodeKey];
+            let target;
 
-            // Esconder o passo atual
-            document.getElementById(`step${currentStep}`).classList.remove('active');
+            if (node.binary) {
+                target = node[choice];
+            } else if (node.options) {
+                target = node.options[choice];
+            }
 
-            if (currentStep < totalSteps) {
-                const next = currentStep + 1;
-                document.getElementById(`step${next}`).classList.add('active');
-                updateProgress(next);
-            } else {
-                updateProgress(4);
-                processResult();
+            if (target.result) {
+                showResult(target.result, target.urgent);
+            } else if (target.next) {
+                renderNode(target.next);
             }
         }
 
-        function processResult() {
-            document.getElementById('stepResult').classList.add('active');
-            
-            const resultText = document.getElementById('resultText');
-            const noticeContainer = document.getElementById('noticeContainer');
+        function showResult(text, isUrgent = false) {
+            const app = document.getElementById('appContent');
+            const cardClass = isUrgent ? 'urgent' : 'success';
+            const cardTitle = isUrgent ? '🔴 Encaminhamento / Recomendação Clínica' : '💊 Orientação e Aconselhamento Farmacêutico';
 
-            // Lógica de Triagem e Encaminhamento
-            if (answers.intensidade === 'muita' || answers.sintomas === 'alerta') {
-                resultText.innerHTML = "Identificámos sinais de dor intensa ou sintomas de alerta (como febre ou vómitos persistentes). <strong>Não deve recorrer à automedicação neste quadro clínico.</strong>";
-                
-                noticeContainer.className = "notice-card urgent";
-                noticeContainer.innerHTML = "⚠️ <strong>CONSULTE UM MÉDICO / LIGUE SNS 24 (808 24 24 24):</strong><br>Medicamentos como <strong>antibióticos</strong>, anti-inflamatórios fortes ou analgesia específica necessitam obrigatoriamente de consulta clínica e receita médica. Dirija-se a um centro de saúde ou urgência médica.";
-            } 
-            else if (answers.sintomas === 'azia') {
-                resultText.innerHTML = "Os sintomas indicam um desconforto gástrico ligeiro. É recomendado fazer refeições leves, evitar gorduras e manter boa hidratação.";
-                
-                noticeContainer.className = "notice-card pharmacy";
-                noticeContainer.innerHTML = "💊 <strong>Aconselhamento na Farmácia:</strong> Pode consultar o seu farmacêutico para a indicação de um antiácido ou protetor gástrico de venda livre. " + 
-                (answers.medicamento === 'sim' ? "<br><br><em>Atenção: Informe o farmacêutico sobre a medicação habitual que já está a tomar para evitar interações.</em>" : "");
-            } 
-            else if (answers.sintomas === 'diarreia') {
-                resultText.innerHTML = "Recomenda-se o reforço imediato da ingestão de líquidos (água ou soluções de reidratação oral) para evitar a desidratação.";
-                
-                noticeContainer.className = "notice-card pharmacy";
-                noticeContainer.innerHTML = "💊 <strong>Aconselhamento na Farmácia:</strong> Pode recorrer a probióticos de venda livre para repor a flora intestinal. Se a diarreia persistir por mais de 48 horas ou surgir febre, <strong>consulte um médico</strong>.";
-            } 
-            else {
-                resultText.innerHTML = "Para dores abdominais ligeiras e pontuais, recomenda-se repouso, aplicação de calor suave na zona abdominal e ingestão de chás/infusões mornas.";
-                
-                noticeContainer.className = "notice-card pharmacy";
-                noticeContainer.innerHTML = "ℹ️ <strong>Acompanhamento:</strong> Caso a dor não melhore no prazo de 24h a 48h ou se intensificar, consulte um farmacêutico ou o seu médico assistente.";
-            }
+            app.innerHTML = `
+                <div class="result-box">
+                    <h3>${cardTitle}</h3>
+                    <div class="notice-card ${cardClass}">
+                        ${text}
+                    </div>
+                </div>
+                <button class="btn-restart" onclick="renderNode('start')">Fazer Nova Avaliação</button>
+            `;
         }
 
-        function restartTriagem() {
-            answers.intensidade = '';
-            answers.inicio = '';
-            answers.sintomas = '';
-            answers.medicamento = '';
-
-            document.getElementById('stepResult').classList.remove('active');
-            document.getElementById('step1').classList.add('active');
-            updateProgress(1);
-        }
-
-        // Inicializar barra
-        updateProgress(1);
+        // Iniciar app
+        renderNode('start');
     </script>
+
 </body>
 </html>
