@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Triagem e Aconselhamento Farmacêutico Online</title>
-    <!-- Fonte Profissional (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -27,17 +26,31 @@
         .container {
             background: #ffffff;
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             border: 1px solid #e2e8f0;
+        }
+
+        .banner-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background-color: #e0f2fe;
+        }
+
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .header {
             background: #0284c7;
             color: #ffffff;
-            padding: 24px;
+            padding: 20px 24px;
             text-align: center;
         }
 
@@ -53,10 +66,9 @@
 
         .header p {
             font-size: 0.9rem;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
-        /* Barra de Progresso */
         .progress-bar-container {
             width: 100%;
             background-color: #e2e8f0;
@@ -124,7 +136,6 @@
             color: #0369a1;
         }
 
-        /* Botões Especiais de Sim/Não */
         .btn-grid-binary {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -151,7 +162,6 @@
             color: #b91c1c;
         }
 
-        /* Resultado */
         .result-card {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -218,6 +228,11 @@
 <body>
 
 <div class="container">
+    <!-- Imagem Banner Médica -->
+    <div class="banner-container">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" alt="Consulta Médica Online" class="banner-img">
+    </div>
+
     <!-- Cabeçalho -->
     <div class="header">
         <h1>🩺 Triagem Médica & Farmacêutica</h1>
@@ -257,7 +272,7 @@
             <h2 class="question-title">Apresenta algum destes sintomas adicionais?</h2>
             <div class="options-grid">
                 <button class="btn-option" onclick="nextStep(3, 'enjoo')">Enjoos, náuseas ou azia <span>→</span></button>
-                <button class="btn-option" onclick="nextStep(3, 'diarreia')">Diarreia ou cólicas mole <span>→</span></button>
+                <button class="btn-option" onclick="nextStep(3, 'diarreia')">Diarreia ou cólicas líquidas <span>→</span></button>
                 <button class="btn-option" onclick="nextStep(3, 'febre')">Febre, vómitos persistentes ou sangue <span>→</span></button>
                 <button class="btn-option" onclick="nextStep(3, 'nenhum')">Nenhum destes <span>→</span></button>
             </div>
@@ -296,7 +311,6 @@
 </div>
 
 <script>
-    // Guardar respostas
     let userAnswers = {
         intensidade: '',
         inicio: '',
@@ -312,22 +326,18 @@
     }
 
     function nextStep(currentStep, answer) {
-        // Guardar resposta do passo atual
         if (currentStep === 1) userAnswers.intensidade = answer;
         if (currentStep === 2) userAnswers.inicio = answer;
         if (currentStep === 3) userAnswers.sintomas = answer;
         if (currentStep === 4) userAnswers.tomaMedicamento = answer;
 
-        // Ocultar passo atual
         document.getElementById(`step${currentStep}`).classList.remove('active');
 
-        // Avançar para o próximo
         if (currentStep < totalSteps) {
             const next = currentStep + 1;
             document.getElementById(`step${next}`).classList.add('active');
             updateProgress(next);
         } else {
-            // Chegou ao fim, mostra o resultado
             document.getElementById('progressBar').style.width = '100%';
             showResults();
         }
@@ -340,7 +350,6 @@
         const alertBox = document.getElementById('alertBox');
         const alertText = document.getElementById('alertText');
 
-        // Lógica Farmacêutica
         if (userAnswers.intensidade === 'intensa' || userAnswers.sintomas === 'febre') {
             recText.innerHTML = "<strong>Atenção:</strong> Devido à intensidade da dor ou à presença de sintomas de alerta (como febre ou vómitos), <strong>não deve tomar medicação por iniciativa própria</strong> sem avaliação clínica.";
             alertText.innerHTML = "🔴 <strong>CONSULTE UM MÉDICO:</strong> Medicamentos como antibióticos ou analgésicos fortes necessitam obrigatoriamente de receita e diagnóstico médico. Dirija-se a um centro de saúde ou urgência.";
@@ -348,7 +357,7 @@
             alertBox.style.borderColor = "#ef4444";
         } 
         else if (userAnswers.sintomas === 'enjoo') {
-            recText.innerHTML = "Para desconforto gástrico e azia ligeira, é recomendado repouso digestivo, hidratação e, se necessário, o uso de um antiaçido ou protetor gástrico de venda livre recomendado na farmácia.";
+            recText.innerHTML = "Para desconforto gástrico e azia ligeira, é recomendado repouso digestivo, hidratação e, se necessário, o uso de um antiácido ou protetor gástrico de venda livre recomendado na farmácia.";
             alertText.innerHTML = "💡 Se estiver a tomar outros medicamentos, confirme com o farmacêutico para evitar interações.";
             alertBox.style.backgroundColor = "#eff6ff";
             alertBox.style.borderColor = "#3b82f6";
@@ -368,18 +377,12 @@
     }
 
     function resetForm() {
-        // Limpar respostas
         userAnswers = { intensidade: '', inicio: '', sintomas: '', tomaMedicamento: '' };
-        
-        // Esconder o resultado
         document.getElementById('stepResult').classList.remove('active');
-        
-        // Voltar ao passo 1
         document.getElementById('step1').classList.add('active');
         updateProgress(1);
     }
 
-    // Inicializa a barra de progresso no arranque
     updateProgress(1);
 </script>
 
