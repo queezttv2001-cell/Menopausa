@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -94,7 +95,18 @@
             font-size: 1.2rem;
             font-weight: 700;
             color: #1e293b;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .asterisk-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background-color: #f8fafc;
+            border-left: 3px solid var(--primary);
+            padding: 8px 12px;
             margin-bottom: 20px;
+            border-radius: 4px;
             line-height: 1.4;
         }
 
@@ -219,15 +231,6 @@
         .btn-secondary-action:hover {
             background-color: #f1f5f9;
         }
-
-        .disclaimer {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-        }
     </style>
 </head>
 <body>
@@ -249,36 +252,43 @@
 
     <script>
         let sessionEvaluations = [];
-        let initialAssessmentDone = false;
 
         const treeData = {
-            start: {
+            /* TRIAGEM INICIAL E NOVO DIAGRAMA DE FLUXO INTEGRADO */
+            q_precoce: {
                 tag: "Triagem Inicial",
-                title: "A utente apresenta sintomas associados à menopausa?",
-                options: [
-                    { text: "Sim", next: "q_idade" },
-                    { text: "Não", result: "Sem indicação para aplicação do protocolo de menopausa. Avaliar outras queixas da utente." }
-                ]
-            },
-            q_idade: {
-                tag: "Avaliação de Idade",
-                title: "A utente tem idade inferior a 45 anos?",
+                title: "Histórico de menopausa precoce?",
                 binary: true,
                 yes: { result: "Encaminhamento médico para avaliação de menopausa precoce (<45 anos) ou Insuficiência ovárica prematura (<40 anos).", urgent: true },
-                no: { next: "q_menqol" }
+                no: { next: "q_imc" }
+            },
+            q_imc: {
+                tag: "Avaliação Antropométrica",
+                title: "Índice de Massa Corporal (IMC) > 27?",
+                binary: true,
+                yes: { result: "Perda ponderal de 10% associada à redução da intensidade dos afrontamentos. Reforçar a importância da dieta equilibrada e de exercício físico.", next: "q_evitar_hormonas" },
+                no: { next: "q_evitar_hormonas" }
+            },
+            q_evitar_hormonas: {
+                tag: "Opção Terapêutica",
+                title: "A utente prefere evitar hormonas?",
+                binary: true,
+                yes: { next: "q_menqol" },
+                no: { result: "Encaminhamento médico para avaliação de terapêutica hormonal.", urgent: true }
             },
             q_menqol: {
-                tag: "Avaliação de Impacto (MENQOL)",
-                title: "Aplicar MENQOL para avaliar sintomas e respetivo impacto na qualidade de vida.<br><br>Os sintomas são graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
+                tag: "Avaliação de Impacto (MENQOL*)",
+                title: "Os sintomas são graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
+                note: "*MENQOL (Menopause-Specific Quality of Life Questionnaire): Questionário validated de avaliação da qualidade de vida específica da menopausa.",
                 binary: true,
-                yes: { result: "Encaminhamento para consulta médica.", urgent: true },
+                yes: { result: "Encaminhamento para consulta médica devido a elevado impacto na qualidade de vida.", urgent: true },
                 no: { next: "q_predominante" }
             },
             q_predominante: {
                 tag: "Sintoma A Avaliar",
-                title: "Selecione o sintoma que pretende avaliar para a utente:",
+                title: "Qual o sintoma predominante?",
                 options: [
-                    { text: "1. Sintomas Vasomotores (Afrontamentos / Suores noturnos)", next: "vasomotores_1" },
+                    { text: "1. Sintomas Vasomotores (Afrontamentos / Suores noturnos)", next: "vasomotores_cancro" },
                     { text: "2. Sintomas Geniturinários", next: "genitu_1" },
                     { text: "3. Saúde Óssea", next: "ossea_1" },
                     { text: "4. Perturbações do Sono", next: "sono_1" },
@@ -289,41 +299,27 @@
                 ]
             },
 
-            /* 1. VASOMOTORES */
-            vasomotores_1: {
+            /* 1. VASOMOTORES (SEGUNDO FLUXOGRAMA INTEGRADO) */
+            vasomotores_cancro: {
                 tag: "Vasomotores",
-                title: "Histórico de cancro hormonodependente?",
+                title: "Histórico de Cancro Hormono-dependente? (Mama, Endométrio)",
                 binary: true,
-                yes: { result: "Sintomas Vasomotores: Não recomendar fitoestrogénios sem avaliação médica.", urgent: true },
-                no: { next: "vasomotores_2" }
+                yes: { result: "Precaução com fitoestrogénios ex: Soja (Glycine max), Trevo Vermelho (Trifolium pratense). Recomenda-se acompanhamento médico.", urgent: true },
+                no: { next: "vasomotores_hepatica" }
             },
-            vasomotores_2: {
+            vasomotores_hepatica: {
                 tag: "Vasomotores",
-                title: "A utente é fumadora?",
+                title: "Patologia Hepática?",
                 binary: true,
-                yes: { next: "vasomotores_3" },
-                no: { next: "vasomotores_4" }
+                yes: { next: "vasomotores_antidepressivos", alertHepatic: true },
+                no: { next: "vasomotores_antidepressivos" }
             },
-            vasomotores_3: {
+            vasomotores_antidepressivos: {
                 tag: "Vasomotores",
-                title: "Informar sobre o possível agravamento dos sintomas vasomotores e promover a cessação tabágica.<br><br>Existe limitação à utilização de fitoestrogénios?",
+                title: "Utente toma antidepressivos?",
                 binary: true,
-                yes: { next: "vasomotores_5" },
-                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40–72 mg/dia." }
-            },
-            vasomotores_4: {
-                tag: "Vasomotores",
-                title: "Existe limitação à utilização de fitoestrogénios?",
-                binary: true,
-                yes: { next: "vasomotores_5" },
-                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40–72 mg/dia." }
-            },
-            vasomotores_5: {
-                tag: "Vasomotores",
-                title: "Patologia hepática?",
-                binary: true,
-                yes: { result: "Sintomas Vasomotores: Evitar erva-de-são-cristóvão (Cimicifuga racemosa). Considerar Extrato de Pólen purificado (ex: 40 mg extrato citoplasmático + 120 mg extrato de pistilo/dia).", urgent: true },
-                no: { result: "Sintomas Vasomotores: Considerar Extrato de Pólen purificado ou erva-de-são-cristóvão (Cimicifuga racemosa)." }
+                yes: { result: "Evitar erva-de-são-joão (Hypericum perforatum) devido ao risco de síndrome serotoninérgica e interações medicamentosas." },
+                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de Soja (Glycine max) ou Extrato de Pólen Purificado de acordo com o perfil da utente." }
             },
 
             /* 2. GENITURINÁRIOS */
@@ -343,7 +339,7 @@
             },
             genitu_3: {
                 tag: "Geniturinários",
-                title: "Aconselhar higiene íntima adequada e evitar produtos potencialmente irritantes.<br><br>Apresenta secura, ardor ou desconforto vaginal?",
+                title: "Apresenta secura, ardor ou desconforto vaginal?",
                 binary: true,
                 yes: { result: "Sintomas Geniturinários: Hidratantes Vaginais Não Hormonais (com ácido hialurónico, fitoestrogénios, pectina). Utilização regular 2 a 3 vezes/semana." },
                 no: { next: "genitu_4" }
@@ -353,7 +349,7 @@
                 title: "Existe dor/desconforto apenas no coito (Dispareunia)?",
                 binary: true,
                 yes: { result: "Sintomas Geniturinários: Lubrificantes vaginais durante a atividade sexual (Verificar compatibilidade com preservativos de látex)." },
-                no: { result: "Sintomas Geniturinários: Reavaliar sintomatologia local." }
+                no: { result: "Sintomas Geniturinários: Reavaliar sintomatologia local e promover higiene íntima adequada." }
             },
 
             /* 3. SAÚDE ÓSSEA */
@@ -403,7 +399,7 @@
             },
             sono_2: {
                 tag: "Perturbações do Sono",
-                title: "Apresenta características sugestivas de insónia inicial ou secundária? (p.ex., tonturas, palpitações, ansiedade)",
+                title: "Apresenta características sugestivas de insónia inicial ou secundária?",
                 binary: true,
                 yes: { result: "Perturbações do Sono: Encaminhamento médico.", urgent: true },
                 no: { next: "sono_3" }
@@ -429,20 +425,6 @@
                 title: "Apresenta instabilidade de humor?",
                 binary: true,
                 yes: { result: "Alterações Psicológicas: Medidas gerais de suporte: exercício físico, sono, gestão do stress e apoio psicológico." },
-                no: { next: "psico_3" }
-            },
-            psico_3: {
-                tag: "Alterações Psicológicas",
-                title: "Suspeita de défice funcional ou ingestão alimentar insuficiente da vitamina B12?",
-                binary: true,
-                yes: { next: "psico_4" },
-                no: { result: "Alterações Psicológicas: Manter medidas gerais de suporte." }
-            },
-            psico_4: {
-                tag: "Alterações Psicológicas",
-                title: "Défice confirmado?",
-                binary: true,
-                yes: { result: "Alterações Psicológicas: Considerar vitaminas do complexo B." },
                 no: { result: "Alterações Psicológicas: Manter medidas gerais de suporte." }
             },
 
@@ -456,13 +438,6 @@
             },
             cog_2: {
                 tag: "Alterações Cognitivas",
-                title: "Alterações cognitivas ligeiras ou queixas de memória?",
-                binary: true,
-                yes: { next: "cog_3" },
-                no: { result: "Alterações Cognitivas: Reforçar medidas de higiene do sono e gestão do stress." }
-            },
-            cog_3: {
-                tag: "Alterações Cognitivas",
                 title: "Consumo adequado de peixe gordo? (1 a 2 vezes por semana)",
                 binary: true,
                 yes: { result: "Alterações Cognitivas: Manter aporte alimentar." },
@@ -472,19 +447,12 @@
             /* 7. METABÓLICAS */
             meta_1: {
                 tag: "Alterações Metabólicas",
-                title: "Índice de Massa Corporal (IMC) >= 27?",
-                binary: true,
-                yes: { result: "Alterações Metabólicas: Considerar perda de peso, sugerir consulta de nutrição, exercício regular de força e aeróbico." },
-                no: { next: "meta_2" }
-            },
-            meta_2: {
-                tag: "Alterações Metabólicas",
                 title: "Triglicéridos altos ou Risco Cardiovascular Elevado?",
                 binary: true,
                 yes: { result: "Alterações Metabólicas: Omega 3 para reduzir a gordura visceral e proteger o coração." },
-                no: { next: "meta_3" }
+                no: { next: "meta_2" }
             },
-            meta_3: {
+            meta_2: {
                 tag: "Alterações Metabólicas",
                 title: "Diabetes Mellitus 2?",
                 binary: true,
@@ -502,19 +470,12 @@
             },
             cut_2: {
                 tag: "Alterações Cutâneas",
-                title: "Apresenta rugas finas ou flacidez?",
+                title: "Apresenta rugas finas, flacidez ou perda de densidade na pele?",
                 binary: true,
-                yes: { result: "Alterações Cutâneas: Aconselhar cosmética de estimulação lipídica/colagénio, emoliantes de base pH e Ácido Hialurónico tópico." },
+                yes: { result: "Alterações Cutâneas: Aconselhar cosmética de estimulação lipídica/colagénio, emolientes de base pH e Ácido Hialurónico tópico." },
                 no: { next: "cut_3" }
             },
             cut_3: {
-                tag: "Alterações Cutâneas",
-                title: "Perda de densidade/firmeza na pele?",
-                binary: true,
-                yes: { result: "Alterações Cutâneas: Dermocosméticos que estimulem a síntese de colagénio e inibidores de impacto negativo da menopausa cutânea." },
-                no: { next: "cut_4" }
-            },
-            cut_4: {
                 tag: "Alterações Cutâneas",
                 title: "Apresenta queda de cabelo ou perda de volume capilar?",
                 binary: true,
@@ -529,13 +490,12 @@
 
             if (!node) return;
 
-            if (nodeKey === 'start' && initialAssessmentDone) {
-                renderNode('q_predominante');
-                return;
-            }
-
             let html = `<span class="step-tag">${node.tag}</span>`;
             html += `<h2 class="question-title">${node.title}</h2>`;
+
+            if (node.note) {
+                html += `<div class="asterisk-note">${node.note}</div>`;
+            }
 
             if (node.binary) {
                 html += `
@@ -563,10 +523,6 @@
                 target = node[choice];
             } else if (node.options) {
                 target = node.options[choice];
-            }
-
-            if (nodeKey === 'q_menqol' && choice === 'no') {
-                initialAssessmentDone = true;
             }
 
             if (target.result) {
@@ -607,11 +563,10 @@
 
         function resetFullSession() {
             sessionEvaluations = [];
-            initialAssessmentDone = false;
-            renderNode('start');
+            renderNode('q_precoce');
         }
 
-        renderNode('start');
+        renderNode('q_precoce');
     </script>
 
 </body>
