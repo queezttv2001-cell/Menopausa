@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -254,7 +253,14 @@
         let sessionEvaluations = [];
 
         const treeData = {
-            /* TRIAGEM INICIAL E NOVO DIAGRAMA DE FLUXO INTEGRADO */
+            /* TRIAGEM INICIAL DO DIAGRAMA GERAL */
+            start: {
+                tag: "Triagem Inicial",
+                title: "A utente apresenta sintomas associados à menopausa?",
+                binary: true,
+                yes: { next: "q_precoce" },
+                no: { result: "Sem indicação para aplicação do protocolo de menopausa. Avaliar outras queixas da utente." }
+            },
             q_precoce: {
                 tag: "Triagem Inicial",
                 title: "Histórico de menopausa precoce?",
@@ -279,16 +285,16 @@
             q_menqol: {
                 tag: "Avaliação de Impacto (MENQOL*)",
                 title: "Os sintomas são graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
-                note: "*MENQOL (Menopause-Specific Quality of Life Questionnaire): Questionário validated de avaliação da qualidade de vida específica da menopausa.",
+                note: "*MENQOL (Menopause-Specific Quality of Life Questionnaire): Questionário de Qualidade de Vida Específico da Menopausa.",
                 binary: true,
-                yes: { result: "Encaminhamento para consulta médica devido a elevado impacto na qualidade de vida.", urgent: true },
+                yes: { result: "Encaminhamento para consulta médica devido ao elevado impacto na qualidade de vida.", urgent: true },
                 no: { next: "q_predominante" }
             },
             q_predominante: {
                 tag: "Sintoma A Avaliar",
                 title: "Qual o sintoma predominante?",
                 options: [
-                    { text: "1. Sintomas Vasomotores (Afrontamentos / Suores noturnos)", next: "vasomotores_cancro" },
+                    { text: "1. Sintomas Vasomotores (Afrontamentos / Suores noturnos)", next: "vaso_1" },
                     { text: "2. Sintomas Geniturinários", next: "genitu_1" },
                     { text: "3. Saúde Óssea", next: "ossea_1" },
                     { text: "4. Perturbações do Sono", next: "sono_1" },
@@ -299,30 +305,51 @@
                 ]
             },
 
-            /* 1. VASOMOTORES (SEGUNDO FLUXOGRAMA INTEGRADO) */
-            vasomotores_cancro: {
+            /* 1. SINTOMAS VASOMOTORES (RAMO COMPLETO) */
+            vaso_1: {
                 tag: "Vasomotores",
                 title: "Histórico de Cancro Hormono-dependente? (Mama, Endométrio)",
                 binary: true,
-                yes: { result: "Precaução com fitoestrogénios ex: Soja (Glycine max), Trevo Vermelho (Trifolium pratense). Recomenda-se acompanhamento médico.", urgent: true },
-                no: { next: "vasomotores_hepatica" }
+                yes: { result: "Precaução com fitoestrogénios ex: Soja (Glycine max), Trevo Vermelho (Trifolium pratense). Encaminhamento para avaliação médica.", urgent: true },
+                no: { next: "vaso_2" }
             },
-            vasomotores_hepatica: {
+            vaso_2: {
+                tag: "Vasomotores",
+                title: "A utente é fumadora?",
+                binary: true,
+                yes: { next: "vaso_3" },
+                no: { next: "vaso_4" }
+            },
+            vaso_3: {
+                tag: "Vasomotores",
+                title: "Informar sobre o possível agravamento dos sintomas vasomotores e promover a cessação tabágica.<br><br>Existe limitação à utilização de fitoestrogénios?",
+                binary: true,
+                yes: { next: "vaso_5" },
+                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40–72 mg/dia." }
+            },
+            vaso_4: {
+                tag: "Vasomotores",
+                title: "Existe limitação à utilização de fitoestrogénios?",
+                binary: true,
+                yes: { next: "vaso_5" },
+                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de soja (Glycine max) 40–72 mg/dia." }
+            },
+            vaso_5: {
                 tag: "Vasomotores",
                 title: "Patologia Hepática?",
                 binary: true,
-                yes: { next: "vasomotores_antidepressivos", alertHepatic: true },
-                no: { next: "vasomotores_antidepressivos" }
+                yes: { result: "Sintomas Vasomotores: Evitar erva-de-são-cristóvão (Cimicifuga racemosa). Considerar Extrato de Pólen purificado.", urgent: true },
+                no: { next: "vaso_6" }
             },
-            vasomotores_antidepressivos: {
+            vaso_6: {
                 tag: "Vasomotores",
                 title: "Utente toma antidepressivos?",
                 binary: true,
-                yes: { result: "Evitar erva-de-são-joão (Hypericum perforatum) devido ao risco de síndrome serotoninérgica e interações medicamentosas." },
-                no: { result: "Sintomas Vasomotores: Considerar Isoflavonas de Soja (Glycine max) ou Extrato de Pólen Purificado de acordo com o perfil da utente." }
+                yes: { result: "Evitar erva-de-são-joão (Hypericum perforatum) devido ao risco de síndrome serotoninérgica." },
+                no: { result: "Sintomas Vasomotores: Considerar Extrato de Pólen purificado ou erva-de-são-cristóvão (Cimicifuga racemosa)." }
             },
 
-            /* 2. GENITURINÁRIOS */
+            /* 2. SINTOMAS GENITURINÁRIOS */
             genitu_1: {
                 tag: "Geniturinários",
                 title: "Apresenta hemorragia pós-menopausa?",
@@ -389,12 +416,12 @@
                 no: { result: "Saúde Óssea: Manter aporte adequado de cálcio e Vitamina D3." }
             },
 
-            /* 4. SONO */
+            /* 4. PERTURBAÇÕES DO SONO */
             sono_1: {
                 tag: "Perturbações do Sono",
                 title: "Está associada a afrontamentos e/ou suores noturnos?",
                 binary: true,
-                yes: { result: "Perturbações do Sono: Priorizar o alívio dos sintomas vasomotores (avaliar queixas vasomotores)." },
+                yes: { result: "Perturbações do Sono: Priorizar o alívio dos sintomas vasomotores." },
                 no: { next: "sono_2" }
             },
             sono_2: {
@@ -412,7 +439,7 @@
                 no: { result: "Perturbações do Sono: Medidas de higiene do sono e suplementar Melatonina." }
             },
 
-            /* 5. PSICOLÓGICAS */
+            /* 5. ALTERAÇÕES PSICOLÓGICAS */
             psico_1: {
                 tag: "Alterações Psicológicas",
                 title: "Alteração marcada da personalidade, depressão ou ideação suicida?",
@@ -428,7 +455,7 @@
                 no: { result: "Alterações Psicológicas: Manter medidas gerais de suporte." }
             },
 
-            /* 6. COGNITIVAS */
+            /* 6. ALTERAÇÕES COGNITIVAS */
             cog_1: {
                 tag: "Alterações Cognitivas",
                 title: "Sintomas graves e/ou incapacitantes?",
@@ -444,7 +471,7 @@
                 no: { result: "Alterações Cognitivas: Considerar suplementação com Omega 3 (DHA e EPA)." }
             },
 
-            /* 7. METABÓLICAS */
+            /* 7. ALTERAÇÕES METABÓLICAS */
             meta_1: {
                 tag: "Alterações Metabólicas",
                 title: "Triglicéridos altos ou Risco Cardiovascular Elevado?",
@@ -460,7 +487,7 @@
                 no: { result: "Alterações Metabólicas: Manter estilo de vida saudável e monitorização regular." }
             },
 
-            /* 8. CUTÂNEAS */
+            /* 8. ALTERAÇÕES CUTÂNEAS */
             cut_1: {
                 tag: "Alterações Cutâneas",
                 title: "Uso de Proteção Solar Diária (Prevenção de Fotoenvelhecimento)?",
@@ -563,10 +590,10 @@
 
         function resetFullSession() {
             sessionEvaluations = [];
-            renderNode('q_precoce');
+            renderNode('start');
         }
 
-        renderNode('q_precoce');
+        renderNode('start');
     </script>
 
 </body>
