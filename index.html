@@ -4,28 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algoritmo de Apoio à Decisão - Menopausa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #006699;
-            --primary-dark: #004d73;
-            --secondary: #00a88f;
-            --bg-body: #f1f5f9;
+            --primary: #0f172a;       /* Azul Escuro Profissional */
+            --accent: #0284c7;        /* Azul Clínico */
+            --accent-hover: #0369a1;
+            --bg-body: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #cbd5e1;
-            --danger: #dc2626;
+            --text-main: #334155;
+            --text-dark: #0f172a;
+            --border: #e2e8f0;
+            --danger: #ef4444;
             --danger-bg: #fef2f2;
-            --success-bg: #f0fdf4;
-            --success: #16a34a;
+            --danger-border: #fca5a5;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --success-border: #6ee7b7;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Source Sans Pro', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -35,210 +37,247 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 12px;
+            padding: 20px 16px;
         }
 
-        .container {
+        .app-card {
             background: var(--card-bg);
             width: 100%;
-            max-width: 580px;
-            border-radius: 8px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            max-width: 640px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
             border: 1px solid var(--border);
             overflow: hidden;
         }
 
-        .header-bar {
-            background: var(--primary);
-            color: white;
-            padding: 10px 16px;
-            text-align: center;
-            font-size: 0.85rem;
+        .header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-sub {
+            font-size: 0.75rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
         }
 
         .content {
-            padding: 16px;
+            padding: 28px 24px;
         }
 
-        .step-tag {
-            display: inline-block;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--primary);
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #e0f2fe;
+            color: var(--accent);
+            margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 6px;
         }
 
-        /* Caixa Estilo Decisão (Losango / Pergunta Compacta) */
-        .decision-box {
-            background: #fff;
-            border: 2px solid #f87171; /* Cor rosa/vermelha idêntica aos losangos do diagrama */
-            border-radius: 6px;
-            padding: 12px;
-            text-align: center;
-            margin-bottom: 14px;
+        .question-card {
+            background-color: #ffffff;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            transition: border-color 0.2s;
         }
 
-        .question-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.3;
+        .question-card:hover {
+            border-color: #cbd5e1;
         }
 
-        .asterisk-note {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-            line-height: 1.2;
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.5;
         }
 
-        /* Botões Compactos Lado a Lado */
+        .note-text {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border);
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Grelha de Decisão (Sim/Não) */
         .binary-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .btn-binary {
-            border: 1.5px solid var(--border);
+        .btn-decision {
             background: #ffffff;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 0.9rem;
+            border: 2px solid var(--border);
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 1.05rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
+            color: var(--text-dark);
             text-align: center;
-            color: var(--text-main);
         }
 
-        .btn-binary.yes:hover {
-            background-color: var(--success-bg);
+        .btn-decision.yes:hover {
             border-color: var(--success);
-            color: var(--success);
+            background-color: var(--success-bg);
+            color: #065f46;
         }
 
-        .btn-binary.no:hover {
-            background-color: var(--danger-bg);
+        .btn-decision.no:hover {
             border-color: var(--danger);
-            color: var(--danger);
+            background-color: var(--danger-bg);
+            color: #991b1b;
         }
 
-        /* Lista Compacta de Sintomas */
+        /* Lista de Seleção de Sintomas */
         .options-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 10px;
         }
 
-        .btn-option {
+        .btn-select {
             background: #ffffff;
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 0.85rem;
+            border: 1.5px solid var(--border);
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-main);
+            color: var(--text-dark);
             cursor: pointer;
             text-align: left;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .btn-option:hover {
-            border-color: var(--primary);
-            background-color: #f0f7fa;
-            color: var(--primary);
+        .btn-select:hover {
+            border-color: var(--accent);
+            background-color: #f0f9ff;
+            color: var(--accent);
+            transform: translateY(-1px);
         }
 
-        /* Caixas de Resultado Idênticas ao Diagrama (Rectângulos Azuis / Vermelhos) */
+        /* Cartões de Recomendações / Resultados */
         .result-box {
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.88rem;
-            line-height: 1.35;
-            margin-bottom: 12px;
-            border: 1.5px solid;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid;
+            line-height: 1.6;
+            font-size: 0.98rem;
         }
 
         .result-box.urgent {
             background-color: var(--danger-bg);
-            border-color: #fca5a5;
-            color: #991b1b;
+            border-color: var(--danger-border);
+            color: #7f1d1d;
         }
 
         .result-box.info {
-            background-color: #f0f9ff;
-            border-color: #bae6fd;
-            color: #0369a1;
+            background-color: var(--success-bg);
+            border-color: var(--success-border);
+            color: #064e3b;
         }
 
-        .btn-action {
-            background-color: var(--primary);
+        .result-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Botões de Ação */
+        .btn-primary-action {
+            background-color: var(--accent);
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 14px;
+            border-radius: 10px;
             width: 100%;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            margin-bottom: 6px;
+            transition: background 0.2s;
+            margin-bottom: 10px;
         }
 
-        .btn-action:hover {
-            background-color: var(--primary-dark);
+        .btn-primary-action:hover {
+            background-color: var(--accent-hover);
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-muted);
+        .btn-secondary-action {
+            background: transparent;
+            color: #64748b;
             border: 1px solid var(--border);
-            padding: 8px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 10px;
             width: 100%;
-            font-size: 0.8rem;
+            font-size: 0.88rem;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary-action:hover {
+            background-color: #f1f5f9;
+            color: var(--text-dark);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header-bar">
-            Algoritmo de Apoio à Decisão na Menopausa
+    <div class="app-card">
+        <div class="header">
+            <div class="header-sub">Algoritmo de Apoio à Decisão</div>
+            <div class="header-title">Aconselhamento de Produtos na Menopausa</div>
         </div>
 
         <div class="content" id="appContent">
-            <!-- Conteúdo carregado dinamicamente -->
+            <!-- Conteúdo dinâmico -->
         </div>
     </div>
 
     <script>
-        let historyStack = [];
-
         const treeData = {
-            /* FLUXO INICIAL RIGOROSO DO DIAGRAMA */
+            /* TRIAGEM INICIAL DO FLUXOGRAMA */
             start: {
                 tag: "Triagem Inicial",
                 title: "A utente apresenta sintomas associados à menopausa?",
                 binary: true,
                 yes: { next: "q_idade" },
-                no: { result: "Sem indicação para aplicação do algoritmo de menopausa.", urgent: false }
+                no: { result: "Sem indicação para aplicação do algoritmo de menopausa. Avaliar outras queixas da utente.", urgent: false }
             },
             q_idade: {
                 tag: "Triagem Inicial",
                 title: "A utente tem idade < 45 anos?",
                 binary: true,
-                yes: { result: "Encaminhamento para consulta médica (Avaliação de Menopausa Precoce <45 anos ou Insuficiência Ovárica Prematura <40 anos).", urgent: true },
+                yes: { result: "Encaminhamento médico para avaliação de Menopausa Precoce (<45 anos) ou Insuficiência Ovárica Prematura (<40 anos).", urgent: true },
                 no: { next: "q_imc" }
             },
             q_imc: {
@@ -253,19 +292,19 @@
                 title: "A utente prefere evitar hormonas?",
                 binary: true,
                 yes: { next: "q_menqol" },
-                no: { result: "Encaminhamento para consulta médica.", urgent: true }
+                no: { result: "Encaminhamento para consulta médica para avaliação de Terapêutica Hormonal.", urgent: true }
             },
             q_menqol: {
                 tag: "Avaliação de Impacto (MENQOL*)",
-                title: "Os sintomas graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
-                note: "*MENQOL (Menopause-Specific Quality of Life Questionnaire): Aplicação de questionário de qualidade de vida.",
+                title: "Os sintomas são graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
+                note: "*MENQOL (Menopause-Specific Quality of Life Questionnaire): Questionário de Qualidade de Vida Específico da Menopausa.",
                 binary: true,
-                yes: { result: "Encaminhamento para consulta médica.", urgent: true },
+                yes: { result: "Encaminhamento para consulta médica devido ao elevado impacto na qualidade de vida.", urgent: true },
                 no: { next: "q_predominante" }
             },
             q_predominante: {
-                tag: "Sintoma A Avaliar",
-                title: "Qual o sintoma predominante ou principal queixa da utente?",
+                tag: "Seleção do Sintoma",
+                title: "Qual o sintoma predominante ou principal queixa?",
                 options: [
                     { text: "1. Sintomas Vasomotores (Afrontamentos / Suores noturnos)", next: "vaso_1" },
                     { text: "2. Sintomas Geniturinários", next: "genitu_1" },
@@ -281,9 +320,9 @@
             /* 1. SINTOMAS VASOMOTORES */
             vaso_1: {
                 tag: "Vasomotores",
-                title: "Histórico de Cancro Hormono-dependente?",
+                title: "Histórico de Cancro Hormono-dependente? (ex: Mama, Endométrio)",
                 binary: true,
-                yes: { result: "Não recomendar fitoestrogénios sem avaliação médica.", urgent: true },
+                yes: { result: "Precaução com fitoestrogénios (ex: Soja, Trevo Vermelho). Encaminhamento para avaliação médica.", urgent: true },
                 no: { next: "vaso_2" }
             },
             vaso_2: {
@@ -318,7 +357,7 @@
                 tag: "Vasomotores",
                 title: "Tomada de Antidepressivos?",
                 binary: true,
-                yes: { result: "Evitar Erva-de-são-joão (Hypericum perforatum) devido ao risco de interação." },
+                yes: { result: "Evitar Erva-de-são-joão (Hypericum perforatum) devido ao risco de síndrome serotoninérgica." },
                 no: { result: "Considerar Extrato de Pólen purificado ou Erva-de-são-cristóvão (Cimicifuga racemosa)." }
             },
 
@@ -327,21 +366,21 @@
                 tag: "Geniturinários",
                 title: "Apresenta hemorragia pós-menopausa?",
                 binary: true,
-                yes: { result: "Encaminhamento médico.", urgent: true },
+                yes: { result: "Encaminhamento médico imediato por hemorragia pós-menopausa.", urgent: true },
                 no: { next: "genitu_2" }
             },
             genitu_2: {
                 tag: "Geniturinários",
                 title: "Apresenta sintomas sugestivos de infeção urinária ou candidíase?",
                 binary: true,
-                yes: { result: "Encaminhamento médico.", urgent: true },
+                yes: { result: "Encaminhamento médico por suspeita de infeção.", urgent: true },
                 no: { next: "genitu_3" }
             },
             genitu_3: {
                 tag: "Geniturinários",
                 title: "Apresenta secura, ardor ou desconforto vaginal?",
                 binary: true,
-                yes: { result: "Hidratantes Vaginais Não Hormonais (com Ácido Hialurónico, fitoestrogénios ou pectina). Utilização regular 2 a 3 vezes por semana ou diária se necessário." },
+                yes: { result: "Hidratantes Vaginais Não Hormonais (com Ácido Hialurónico, fitoestrogénios, pectina). Utilização regular 2 a 3 vezes por semana." },
                 no: { next: "genitu_4" }
             },
             genitu_4: {
@@ -349,7 +388,7 @@
                 title: "Existe dor/desconforto apenas no coito (Dispareunia)?",
                 binary: true,
                 yes: { result: "Lubrificantes vaginais durante a atividade sexual (Verificar compatibilidade com preservativos de látex)." },
-                no: { result: "Reavaliar sintomatologia local." }
+                no: { result: "Reavaliar sintomatologia local e promover higiene íntima adequada." }
             },
 
             /* 3. SAÚDE ÓSSEA */
@@ -364,7 +403,7 @@
                 tag: "Saúde Óssea",
                 title: "Apresenta fratura por fragilidade?",
                 binary: true,
-                yes: { result: "Encaminhamento para consulta médica.", urgent: true },
+                yes: { result: "Considerar Risco de Queda e fraturas e encaminhamento médico.", urgent: true },
                 no: { next: "ossea_3" }
             },
             ossea_3: {
@@ -399,7 +438,7 @@
             },
             sono_2: {
                 tag: "Perturbações do Sono",
-                title: "Apresenta características de insónia grave ou refratária?",
+                title: "Apresenta características sugestivas de insónia inicial ou secundária?",
                 binary: true,
                 yes: { result: "Encaminhamento médico.", urgent: true },
                 no: { next: "sono_3" }
@@ -415,16 +454,16 @@
             /* 5. ALTERAÇÕES PSICOLÓGICAS */
             psico_1: {
                 tag: "Alterações Psicológicas",
-                title: "Alteração marcada da personalidade, depressão grave ou ideação suicida?",
+                title: "Alteração marcada da personalidade, depressão ou ideação suicida?",
                 binary: true,
-                yes: { result: "Encaminhamento médico imediato.", urgent: true },
+                yes: { result: "Encaminhamento médico urgente.", urgent: true },
                 no: { next: "psico_2" }
             },
             psico_2: {
                 tag: "Alterações Psicológicas",
                 title: "Apresenta instabilidade de humor?",
                 binary: true,
-                yes: { result: "Medidas gerais de suporte: exercício físico, higiene do sono, gestão do stress e apoio psicológico." },
+                yes: { result: "Medidas gerais de suporte: exercício físico, sono, gestão do stress e apoio psicológico." },
                 no: { result: "Manter medidas gerais de suporte." }
             },
 
@@ -441,7 +480,7 @@
                 title: "Consumo adequado de peixe gordo? (1 a 2 vezes por semana)",
                 binary: true,
                 yes: { result: "Manter aporte alimentar." },
-                no: { result: "Considerar suplementação com Omega 3 (DHA/EPA)." }
+                no: { result: "Considerar suplementação com Omega 3 (DHA e EPA)." }
             },
 
             /* 7. ALTERAÇÕES METABÓLICAS */
@@ -449,7 +488,7 @@
                 tag: "Alterações Metabólicas",
                 title: "Triglicéridos altos ou Risco Cardiovascular Elevado?",
                 binary: true,
-                yes: { result: "Considerar Omega 3." },
+                yes: { result: "Considerar Omega 3 para reduzir a gordura visceral e proteger o coração." },
                 no: { next: "meta_2" }
             },
             meta_2: {
@@ -463,23 +502,23 @@
             /* 8. ALTERAÇÕES CUTÂNEAS */
             cut_1: {
                 tag: "Alterações Cutâneas",
-                title: "Proteção Solar Diária (Prevenção de Fotoenvelhecimento)?",
+                title: "Uso de Proteção Solar Diária (Prevenção de Fotoenvelhecimento)?",
                 binary: true,
                 yes: { next: "cut_2" },
                 no: { result: "Aconselhar uso diário de fotoprotetor de amplo espectro (FPS 30-50+)." }
             },
             cut_2: {
                 tag: "Alterações Cutâneas",
-                title: "Apresenta secura, rugas finas ou flacidez?",
+                title: "Apresenta rugas finas, flacidez ou perda de densidade na pele?",
                 binary: true,
-                yes: { result: "Aconselhar cosmética de estimulação lipídica/colagénio, emolientes e Ácido Hialurónico tópico." },
+                yes: { result: "Aconselhar cosmética de estimulação lipídica/colagénio, emolientes de base pH e Ácido Hialurónico tópico." },
                 no: { next: "cut_3" }
             },
             cut_3: {
                 tag: "Alterações Cutâneas",
                 title: "Apresenta queda de cabelo ou perda de volume capilar?",
                 binary: true,
-                yes: { result: "Dermocosméticos capilares e suplementar vitaminas do complexo B, Zinco." },
+                yes: { result: "Dermocosméticos capilares e suplementar vitaminas do complexo B, Zinco e aminoácidos." },
                 no: { result: "Manter rotina dermocosmética habitual." }
             }
         };
@@ -490,26 +529,26 @@
 
             if (!node) return;
 
-            let html = `<span class="step-tag">${node.tag}</span>`;
+            let html = `<div class="badge">${node.tag}</div>`;
             
-            html += `<div class="decision-box">`;
-            html += `<div class="question-title">${node.title}</div>`;
+            html += `<div class="question-card">`;
+            html += `<div class="question-text">${node.title}</div>`;
             if (node.note) {
-                html += `<div class="asterisk-note">${node.note}</div>`;
+                html += `<div class="note-text">${node.note}</div>`;
             }
             html += `</div>`;
 
             if (node.binary) {
                 html += `
                     <div class="binary-grid">
-                        <button class="btn-binary yes" onclick="handleSelect('${nodeKey}', 'yes')">SIM</button>
-                        <button class="btn-binary no" onclick="handleSelect('${nodeKey}', 'no')">NÃO</button>
+                        <button class="btn-decision yes" onclick="handleSelect('${nodeKey}', 'yes')">SIM</button>
+                        <button class="btn-decision no" onclick="handleSelect('${nodeKey}', 'no')">NÃO</button>
                     </div>
                 `;
             } else if (node.options) {
                 html += `<div class="options-list">`;
                 node.options.forEach((opt, idx) => {
-                    html += `<button class="btn-option" onclick="handleSelect('${nodeKey}', ${idx})">${opt.text} <span>→</span></button>`;
+                    html += `<button class="btn-select" onclick="handleSelect('${nodeKey}', ${idx})">${opt.text} <span>→</span></button>`;
                 });
                 html += `</div>`;
             }
@@ -537,21 +576,23 @@
         function showResult(text, isUrgent = false, nextStep = null) {
             const app = document.getElementById('appContent');
             const resultClass = isUrgent ? 'urgent' : 'info';
-            const icon = isUrgent ? '🔴' : '🔹';
+            const icon = isUrgent ? '⚠️' : '💡';
+            const titleText = isUrgent ? 'Encaminhamento Médico / Alerta Clínico' : 'Recomendação / Orientação Farmacêutica';
 
             let html = `
                 <div class="result-box ${resultClass}">
-                    <strong>${icon} Recomendação / Decisão:</strong><br><br>${text}
+                    <div class="result-title"><span>${icon}</span> ${titleText}</div>
+                    <div>${text}</div>
                 </div>
             `;
 
             if (nextStep) {
-                html += `<button class="btn-action" onclick="renderNode('${nextStep}')">Prosseguir para Próximo Passo →</button>`;
+                html += `<button class="btn-primary-action" onclick="renderNode('${nextStep}')">Prosseguir para Próxima Avaliação →</button>`;
             } else {
-                html += `<button class="btn-action" onclick="renderNode('q_predominante')">➕ Avaliar Outro Sintoma</button>`;
+                html += `<button class="btn-primary-action" onclick="renderNode('q_predominante')">➕ Avaliar Outro Sintoma</button>`;
             }
 
-            html += `<button class="btn-secondary" onclick="resetSession()">🔄 Recomeçar Algoritmo</button>`;
+            html += `<button class="btn-secondary-action" onclick="resetSession()">🔄 Reiniciar Algoritmo</button>`;
 
             app.innerHTML = html;
         }
