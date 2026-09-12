@@ -220,13 +220,36 @@
             background-color: #f1f5f9;
         }
 
-        .disclaimer {
-            font-size: 0.78rem;
-            color: var(--text-muted);
+        .menqol-tool-box {
+            background-color: #f0f7fa;
+            border: 1px solid #b3d7e8;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
             text-align: center;
-            margin-top: 20px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
+        }
+
+        .menqol-tool-box p {
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .btn-menqol-link {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-menqol-link:hover {
+            background-color: #008f7a;
         }
     </style>
 </head>
@@ -270,6 +293,7 @@
             q_menqol: {
                 tag: "Avaliação de Impacto (MENQOL)",
                 title: "Aplicar MENQOL para avaliar sintomas e respetivo impacto na qualidade de vida.<br><br>Os sintomas são graves, persistentes ou apresentam impacto significativo na qualidade de vida?",
+                showMenqolButton: true,
                 binary: true,
                 yes: { result: "Encaminhamento para consulta médica.", urgent: true },
                 no: { next: "q_predominante" }
@@ -537,6 +561,15 @@
             let html = `<span class="step-tag">${node.tag}</span>`;
             html += `<h2 class="question-title">${node.title}</h2>`;
 
+            if (node.showMenqolButton) {
+                html += `
+                    <div class="menqol-tool-box">
+                        <p>Ainda não realizou o questionário MENQOL com a utente?</p>
+                        <a href="#" class="btn-menqol-link" onclick="openMenqolForm(event)">📋 Abrir Questionário MENQOL em nova janela</a>
+                    </div>
+                `;
+            }
+
             if (node.binary) {
                 html += `
                     <div class="binary-grid">
@@ -553,6 +586,46 @@
             }
 
             app.innerHTML = html;
+        }
+
+        function openMenqolForm(e) {
+            e.preventDefault();
+            const menqolHtml = `
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionário MENQOL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Source Sans Pro', sans-serif; background: #f4f7f9; padding: 20px; color: #2c3e50; }
+        .box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #006699; margin-bottom: 15px; }
+        p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; }
+        ul { margin-left: 20px; margin-bottom: 20px; font-size: 0.95rem; }
+        li { margin-bottom: 8px; }
+        .close-btn { background: #006699; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Questionário MENQOL (Menopause-Specific Quality of Life)</h2>
+        <p>O MENQOL avalia o impacto dos sintomas da menopausa na qualidade de vida ao longo dos últimos 30 dias em 4 domínios principais:</p>
+        <ul>
+            <li><strong>Vasomotor:</strong> Afrontamentos, suores noturnos, sensação de calor.</li>
+            <li><strong>Psicossocial:</strong> Ansiedade, irritabilidade, perda de memória, cansaço mental.</li>
+            <li><strong>Físico:</strong> Dores articulares, perturbações do sono, diminuição de energia, alterações cutâneas.</li>
+            <li><strong>Sexual:</strong> Alterações no desejo sexual, secura vaginal, desconforto no coito.</li>
+        </ul>
+        <p><strong>Cálculo/Avaliação:</strong> Cada item é classificado de 0 (não incomoda) a 6 (incomoda extremamente). A pontuação final reflete a gravidade do impacto na qualidade de vida.</p>
+        <button class="close-btn" onclick="window.close()">Fechar Janela</button>
+    </div>
+</body>
+</html>
+            `;
+            const win = window.open("", "_blank");
+            win.document.write(menqolHtml);
+            win.document.close();
         }
 
         function handleSelect(nodeKey, choice) {
