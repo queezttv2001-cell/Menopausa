@@ -253,15 +253,15 @@
         let sessionEvaluations = [];
 
         const treeData = {
-            /* TRIAGEM INICIAL DO DIAGRAMA GERAL */
+            /* TRIAGEM INICIAL EXATA DO DIAGRAMA */
             start: {
                 tag: "Triagem Inicial",
                 title: "A utente apresenta sintomas associados à menopausa?",
                 binary: true,
-                yes: { next: "q_idade_45" },
-                no: { result: "Sem indicação para aplicação do protocolo de menopausa. Avaliar outras queixas da utente." }
+                yes: { next: "q_idade" },
+                no: { result: "Sem indicação para aplicação do algoritmo de menopausa. Avaliar outras queixas da utente." }
             },
-            q_idade_45: {
+            q_idade: {
                 tag: "Triagem Inicial",
                 title: "Idade < 45 anos?",
                 binary: true,
