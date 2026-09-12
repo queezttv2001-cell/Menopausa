@@ -258,14 +258,14 @@
                 tag: "Triagem Inicial",
                 title: "A utente apresenta sintomas associados à menopausa?",
                 binary: true,
-                yes: { next: "q_precoce" },
+                yes: { next: "q_idade_45" },
                 no: { result: "Sem indicação para aplicação do protocolo de menopausa. Avaliar outras queixas da utente." }
             },
-            q_precoce: {
+            q_idade_45: {
                 tag: "Triagem Inicial",
-                title: "Histórico de menopausa precoce?",
+                title: "Idade < 45 anos?",
                 binary: true,
-                yes: { result: "Encaminhamento médico para avaliação de menopausa precoce (<45 anos) ou Insuficiência ovárica prematura (<40 anos).", urgent: true },
+                yes: { result: "Encaminhamento médico para avaliação de Menopausa Precoce (<45 anos) ou Insuficiência Ovárica Prematura (<40 anos).", urgent: true },
                 no: { next: "q_imc" }
             },
             q_imc: {
@@ -305,7 +305,7 @@
                 ]
             },
 
-            /* 1. SINTOMAS VASOMOTORES (RAMO COMPLETO) */
+            /* 1. SINTOMAS VASOMOTORES */
             vaso_1: {
                 tag: "Vasomotores",
                 title: "Histórico de Cancro Hormono-dependente? (Mama, Endométrio)",
