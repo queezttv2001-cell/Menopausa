@@ -246,6 +246,7 @@
             text-decoration: none;
             font-size: 0.9rem;
             transition: background 0.2s;
+            cursor: pointer;
         }
 
         .btn-menqol-link:hover {
@@ -564,7 +565,7 @@
             if (node.showMenqolButton) {
                 html += `
                     <div class="menqol-tool-box">
-                        <p>Ainda não realizou o questionário MENQOL com a utente?</p>
+                        <p>Ainda não calculou o impacto dos sintomas com a utente?</p>
                         <a href="#" class="btn-menqol-link" onclick="openMenqolForm(event)">📋 Abrir Questionário MENQOL em nova janela</a>
                     </div>
                 `;
@@ -590,40 +591,119 @@
 
         function openMenqolForm(e) {
             e.preventDefault();
+            const items = [
+                "1. Sensação de afrontamento ou de mal-estar",
+                "2. Suores noturnos",
+                "3. Suar",
+                "4. Sentir-se insatisfeita com a sua vida pessoal",
+                "5. Sentir ansiedade ou nervosismo",
+                "6. Ter perda de memória",
+                "7. Não conseguir fazer as coisas que fazia habitualmente",
+                "8. Sentir-se deprimida ou \"em baixo\"",
+                "9. Ficar impaciente com as outras pessoas",
+                "10. Sentir vontade de estar sozinha",
+                "11. Flatulência (gases) ou dores associadas (ex: cólicas)",
+                "12. Dores nos músculos e ligamentos/articulações",
+                "13. Sentir-se cansada ou esgotada",
+                "14. Dificuldades em dormir",
+                "15. Dores na parte de trás do pescoço ou na cabeça",
+                "16. Diminuição da força física",
+                "17. Diminuição da resistência e da energia física",
+                "18. Sentir falta de energia fisicamente",
+                "19. Ter a pele seca",
+                "20. Aumentar de peso",
+                "21. Aumento do pelo facial",
+                "22. Alterações na aparência, textura ou aspeto da sua pele",
+                "23. Sentir-se \"inchada\"",
+                "24. Dores no fundo das costas",
+                "25. Urinar frequentemente",
+                "26. Urinar involuntariamente quando ri ou tosse",
+                "27. Alteração do seu desejo sexual",
+                "28. Secura vaginal quando tem relações sexuais",
+                "29. Evitamento de intimidade sexual"
+            ];
+
+            let tableRows = items.map((item, index) => {
+                let options = '';
+                for(let i=0; i<=6; i++) {
+                    options += `<label style="margin: 0 4px; font-size: 0.85rem; cursor: pointer;"><input type="radio" name="item_${index}" value="${i}"> ${i}</label>`;
+                }
+                return `
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 8px; font-size: 0.88rem;">${item}</td>
+                        <td style="padding: 8px; text-align: center; white-space: nowrap;">
+                            <label style="margin-right: 8px; font-size: 0.85rem;"><input type="checkbox" onchange="toggleRow(this, ${index})"> Não</label>
+                            <label style="font-size: 0.85rem;"><input type="checkbox" onchange="toggleRow(this, ${index})"> Sim</label>
+                        </td>
+                        <td style="padding: 8px; text-align: center; white-space: nowrap;">
+                            ${options}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
             const menqolHtml = `
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Questionário MENQOL</title>
+    <title>QQVM | Mulheres Pós-Menopausa</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Source Sans Pro', sans-serif; background: #f4f7f9; padding: 20px; color: #2c3e50; }
-        .box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #006699; margin-bottom: 15px; }
-        p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; }
-        ul { margin-left: 20px; margin-bottom: 20px; font-size: 0.95rem; }
-        li { margin-bottom: 8px; }
-        .close-btn { background: #006699; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #f4f7f9; padding: 15px; color: #2c3e50; }
+        .box { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #006699; text-align: center; margin-bottom: 5px; font-size: 1.4rem; }
+        p.subtitle { text-align: center; font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
+        .instructions { background: #f0f7fa; border-left: 4px solid #006699; padding: 12px; margin-bottom: 20px; font-size: 0.88rem; line-height: 1.4; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { background: #006699; color: white; padding: 10px; font-size: 0.85rem; text-align: left; }
+        .scale-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; color: #475569; padding: 0 5px; }
+        .btn-container { text-align: center; margin-top: 20px; }
+        .close-btn { background: #006699; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+        .close-btn:hover { background: #004d73; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h2>Questionário MENQOL (Menopause-Specific Quality of Life)</h2>
-        <p>O MENQOL avalia o impacto dos sintomas da menopausa na qualidade de vida ao longo dos últimos 30 dias em 4 domínios principais:</p>
-        <ul>
-            <li><strong>Vasomotor:</strong> Afrontamentos, suores noturnos, sensação de calor.</li>
-            <li><strong>Psicossocial:</strong> Ansiedade, irritabilidade, perda de memória, cansaço mental.</li>
-            <li><strong>Físico:</strong> Dores articulares, perturbações do sono, diminuição de energia, alterações cutâneas.</li>
-            <li><strong>Sexual:</strong> Alterações no desejo sexual, secura vaginal, desconforto no coito.</li>
-        </ul>
-        <p><strong>Cálculo/Avaliação:</strong> Cada item é classificado de 0 (não incomoda) a 6 (incomoda extremamente). A pontuação final reflete a gravidade do impacto na qualidade de vida.</p>
-        <button class="close-btn" onclick="window.close()">Fechar Janela</button>
+        <h2>| QQVM | Mulheres pós-menopausa |</h2>
+        <p class="subtitle">Questionário de Qualidade de Vida na Menopausa</p>
+        
+        <div class="instructions">
+            Este questionário é completamente confidencial.<br>
+            Para cada um dos seguintes itens, indique se experienciou o problema no <strong>PASSADO MÊS</strong>. Se teve o referido problema, indique o quanto se sentiu incomodada por esse problema.
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 45%;">Item / Sintoma</th>
+                    <th style="width: 15%; text-align: center;">Presença</th>
+                    <th style="width: 40%; text-align: center;">
+                        <div class="scale-header">
+                            <span>Nada Incomodada</span>
+                            <span>Extremamente Incomodada</span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                ${tableRows}
+            </tbody>
+        </table>
+
+        <div class="btn-container">
+            <button class="close-btn" onclick="window.close()">Concluir / Fechar Janela</button>
+        </div>
     </div>
+    <script>
+        function toggleRow(cb, index) {
+            // Apenas auxiliar visual de interação
+        }
+    <\/script>
 </body>
 </html>
             `;
-            const win = window.open("", "_blank");
+            const win = window.open("", "_blank", "width=950,height=800,scrollbars=yes");
             win.document.write(menqolHtml);
             win.document.close();
         }
