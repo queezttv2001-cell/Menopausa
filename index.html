@@ -626,16 +626,16 @@
             let tableRows = items.map((item, index) => {
                 let options = '';
                 for(let i=0; i<=6; i++) {
-                    options += `<label style="margin: 0 4px; font-size: 0.85rem; cursor: pointer;"><input type="radio" name="item_${index}" value="${i}"> ${i}</label>`;
+                    options += `<label style="margin: 0 3px; font-size: 0.82rem; cursor: pointer;"><input type="radio" name="scale_${index}" value="${i}"> ${i}</label>`;
                 }
                 return `
                     <tr style="border-bottom: 1px solid #e2e8f0;">
-                        <td style="padding: 8px; font-size: 0.88rem;">${item}</td>
-                        <td style="padding: 8px; text-align: center; white-space: nowrap;">
-                            <label style="margin-right: 8px; font-size: 0.85rem;"><input type="checkbox" onchange="toggleRow(this, ${index})"> Não</label>
-                            <label style="font-size: 0.85rem;"><input type="checkbox" onchange="toggleRow(this, ${index})"> Sim</label>
+                        <td style="padding: 6px 8px; font-size: 0.85rem;">${item}</td>
+                        <td style="padding: 6px 8px; text-align: center; white-space: nowrap;">
+                            <label style="margin-right: 6px; font-size: 0.82rem;"><input type="radio" name="presenc_${index}" value="nao" onclick="disableScale(${index})"> Não</label>
+                            <label style="font-size: 0.82rem;"><input type="radio" name="presenc_${index}" value="sim" onclick="enableScale(${index})"> Sim</label>
                         </td>
-                        <td style="padding: 8px; text-align: center; white-space: nowrap;">
+                        <td style="padding: 6px 8px; text-align: center; white-space: nowrap;" id="scale_container_${index}">
                             ${options}
                         </td>
                     </tr>
@@ -647,57 +647,84 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>QQVM | Mulheres Pós-Menopausa</title>
+    <title>QQVM / MENQOL - Avaliação de Resultados</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Source Sans Pro', sans-serif; background: #f4f7f9; padding: 15px; color: #2c3e50; }
         .box { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { color: #006699; text-align: center; margin-bottom: 5px; font-size: 1.4rem; }
-        p.subtitle { text-align: center; font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
-        .instructions { background: #f0f7fa; border-left: 4px solid #006699; padding: 12px; margin-bottom: 20px; font-size: 0.88rem; line-height: 1.4; }
+        p.subtitle { text-align: center; font-size: 0.9rem; color: #64748b; margin-bottom: 15px; }
+        .patient-info { display: flex; gap: 15px; margin-bottom: 15px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; }
+        .patient-info input { padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.9rem; flex: 1; }
+        .instructions { background: #f0f7fa; border-left: 4px solid #006699; padding: 10px; margin-bottom: 15px; font-size: 0.85rem; line-height: 1.4; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th { background: #006699; color: white; padding: 10px; font-size: 0.85rem; text-align: left; }
-        .scale-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; color: #475569; padding: 0 5px; }
-        .btn-container { text-align: center; margin-top: 20px; }
-        .close-btn { background: #006699; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
-        .close-btn:hover { background: #004d73; }
+        th { background: #006699; color: white; padding: 8px; font-size: 0.82rem; text-align: left; }
+        .scale-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; color: #ffffff; }
+        .btn-container { text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
+        .btn { border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
+        .btn-print { background: #00a88f; color: white; }
+        .btn-print:hover { background: #008f7a; }
+        .btn-close { background: #64748b; color: white; }
+        .btn-close:hover { background: #475569; }
+        
+        @media print {
+            body { background: white; padding: 0; }
+            .box { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+            .btn-container, .instructions { display: none !important; }
+            .patient-info { border: none; padding: 0; margin-bottom: 20px; }
+            .patient-info input { border: none; border-bottom: 1px solid #000; border-radius: 0; }
+            th { background: #2c3e50 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
     </style>
 </head>
 <body>
     <div class="box">
-        <h2>| QQVM | Mulheres pós-menopausa |</h2>
-        <p class="subtitle">Questionário de Qualidade de Vida na Menopausa</p>
-        
-        <div class="instructions">
-            Este questionário é completamente confidencial.<br>
-            Para cada um dos seguintes itens, indique se experienciou o problema no <strong>PASSADO MÊS</strong>. Se teve o referido problema, indique o quanto se sentiu incomodada por esse problema.
+        <h2>| QQVM | Mulheres Pós-Menopausa</h2>
+        <p class="subtitle">Questionário de Qualidade de Vida na Menopausa (MENQOL)</p>
+
+        <div class="patient-info">
+            <input type="text" placeholder="Nome da Utente / ID:">
+            <input type="date" value="${new Date().toISOString().split('T')[0]}">
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 45%;">Item / Sintoma</th>
-                    <th style="width: 15%; text-align: center;">Presença</th>
-                    <th style="width: 40%; text-align: center;">
-                        <div class="scale-header">
-                            <span>Nada Incomodada</span>
-                            <span>Extremamente Incomodada</span>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                ${tableRows}
-            </tbody>
-        </table>
+        <div class="instructions">
+            Indique se experienciou o problema no <strong>PASSADO MÊS</strong>. Se teve o referido problema, indique o quanto se sentiu incomodada numa escala de 0 (Nada) a 6 (Extremamente).
+        </div>
+
+        <form id="menqolForm">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 45%;">Item / Sintoma</th>
+                        <th style="width: 15%; text-align: center;">Presença</th>
+                        <th style="width: 40%; text-align: center;">
+                            <div class="scale-header">
+                                <span>0 (Nada)</span>
+                                <span>6 (Extremamente)</span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRows}
+                </tbody>
+            </table>
+        </form>
 
         <div class="btn-container">
-            <button class="close-btn" onclick="window.close()">Concluir / Fechar Janela</button>
+            <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
+            <button type="button" class="btn btn-close" onclick="window.close()">Fechar</button>
         </div>
     </div>
+
     <script>
-        function toggleRow(cb, index) {
-            // Apenas auxiliar visual de interação
+        function disableScale(index) {
+            const radios = document.getElementsByName('scale_' + index);
+            radios.forEach(r => { r.checked = false; r.disabled = true; });
+        }
+        function enableScale(index) {
+            const radios = document.getElementsByName('scale_' + index);
+            radios.forEach(r => { r.disabled = false; });
         }
     <\/script>
 </body>
